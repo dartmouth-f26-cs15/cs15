@@ -1,5 +1,5 @@
 ---
-geoemtry: margin=1in
+geometry: margin=1in
 ---
 
 # Commands
