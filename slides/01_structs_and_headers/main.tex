@@ -1,0 +1,170 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{Multi-File C Programs}
+    \begin{itemize}
+        \pause \item Recall \textpf{my\_log2} and \textpf{my\_abs} from last class.
+        \pause \item Suppose that we want to use them in the following program:
+    \end{itemize}
+    \inputminted{c}{main.c}
+
+    % verbally explain what the ul suffix on an integer literal means.
+    \pause \begin{center} \textbf{Task}: Copy down this program as-is into a file named \textpf{main.c} and attempt to compile it. \end{center}
+\end{frame}
+
+
+\begin{frame}[fragile]{Understanding the Errors}
+    \scriptsize
+    \begin{verbatim}
+main.c: In function ‘main’:
+main.c:2:12: error: implicit declaration of function ‘my_log2’ [-Wimplicit-function-declaration]
+    2 |     return my_log2(my_abs(-100));
+      |            ^~~~~~~
+main.c:2:20: error: implicit declaration of function ‘my_abs’ [-Wimplicit-function-declaration]
+    2 |     return my_log2(my_abs(-100));
+      |                    ^~~~~~
+    \end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{What is Implicit Function Declaration?}
+    \pause \begin{center} The compiler considers a function \textpf{f} to be ``implicitly declared" when \textpf{f} is called before the compiler knows that \textpf{f} exists. \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Fixing Implicit Function Declaration}
+    \begin{center} How do we fix this? \end{center}
+    \begin{itemize}
+        \pause \item Copy and paste the definitions of \textpf{my\_log2} and \textpf{my\_abs} into \textpf{main.c}.
+            \begin{itemize}
+                \pause \item Doesn't scale well. We can't just cram everything into a single file!
+            \end{itemize}
+        \pause \item Define the functions in another file, then instruct the compiler to read both files.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Activity \#1.0: Building a Multi-File Program}
+    \begin{enumerate}
+        \pause \item Take the definitions of \textpf{my\_log2} and \textpf{my\_abs}, and place them in a new file named \textpf{my\_math.c}.
+        \pause \item Attempt to compile both \textpf{my\_math.c} and \textpf{main.c} together by passing them both to the compiler driver.
+        \begin{itemize}
+            \pause \item Why doesn't this work?
+            \pause \item Hint: The compiler considers a function  \textpf{f} to ``implicitly declared" when \textpf{f} is called before the compiler knows that \textpf{f} exists.
+        \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Activity \#1.1: Telling the Compiler to Shut Up}
+    \begin{itemize}
+        \pause \item The compiler still fails with the same error, because under the hood, files are compiled one at a time, and then linked together.
+        \pause \item Thus, when the compiler is building \textpf{main.c}, it still doesn't know about the functions in \textpf{my\_math.c}.
+        \pause \item You can tell the compiler to stop worrying about this by passing the \textpf{-Wno-implicit-function-declaration} flag on the command line.
+        \pause \item This works because the linker resolves function references, and the linker has access to the results of compiling both files.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Activity \#1.2: Why \textpf{-Wno-implicit-function-declaration} is Bad}
+    \begin{center} \textbf{NEVER USE \textpf{-Wno-implicit-function-declaration}!!!} \end{center}
+
+    \begin{itemize}
+        \pause \item The compiler doesn't know the argument counts and types for implicitly-declared functions.
+        \pause \item The linker doesn't care about argument counts and types at all.
+        \pause \item Try modifying \textpf{main.c} to call the functions with the wrong numbers of arguments. What happens?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Activity \#1.3: Making the Compiler Happy}
+    \begin{itemize}
+        \pause \item To inform the compiler about your math functions in \textpf{main.c}, those functions must be declared.
+        \pause \item A function declaration is just like a function definition, but no code block is provided.
+        \pause \item For example, the declaration for \textpf{my\_log2} might look like this:
+            \begin{minted}{c}
+unsigned char my_log2(unsigned long x);
+            \end{minted}
+        \pause \item Modify \textpf{main.c} to add declarations for your math functions before the definition of \textpf{main}. This should resolve the compiler errors without using the evil flag.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Activity \#1.4: Your First Header File}
+    \begin{itemize}
+        \pause \item This is still kind of ugly. We don't want to litter our programs with a million function declarations.
+        \pause \item To avoid this, function declarations are typically placed in their own files, called header files.
+        \pause \item Make a header file, \textpf{my\_math.h}, and move the declarations from \textpf{main.c} into it.
+        \pause \item Then, instruct the preprocessor to paste its contents into \textpf{main.c} by sticking \textpf{\#include "my\_math.h"} at the top of \textpf{main.c}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{\#include}}
+    \begin{itemize}
+        \pause \item Recall that the C preprocessor evaluates special directives within your C code.
+        \pause \item \textpf{\#include} is one such directive.
+        \pause \item The \textpf{\#include} directive tells the preprocessor to paste the contents of another file into the current file.
+        \pause \item It takes a single argument, which is a path surrounded by either \textpf{""} or \textpf{<>}.
+        \pause \item If the path is surrounded by \textpf{""}, the path is relative to the current directory. % Technically, it just tries relative to the current directory first, then falls back to the system include path. Too much work to explain in a slide though.
+        \pause \item If the path is surrounded by \textpf{<>}, the path is relative to the system's default include path (\textpf{/usr/include}).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{struct}s}
+    \begin{itemize}
+        \pause \item C provides a few keywords for defining new data types.
+        \pause \item \textpf{struct} is one such keyword.
+        \pause \item The \textpf{struct} keyword allows for the definition of ``record types," (also known as ``product types").
+        \pause \item Basically, a \textpf{struct} is made by bundling together other data types.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{struct} Definition}
+    Here's an example of a \textpf{struct} definition:
+    \begin{minted}{c}
+struct example_struct {
+    unsigned char first_field;
+    int second_field;
+    short third_field;
+};
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Populating a \textpf{struct}}
+    To access in the fields in a \textpf{struct}, use the \textpf{.} operator.
+
+    \pause For example, to make a \textpf{struct example\_struct}, and set all of its fields to \textpf{100},
+    \begin{minted}{c}
+struct example_struct s;
+s.first_field = 100;
+s.second_field = 100;
+s.third_field = 100;
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Activity \#2: Fractions!}
+    \begin{itemize}
+        \pause \item Write a header file, \textpf{fractions.h}, that defines a \textpf{struct} that represents a fraction, and declares functions for fraction multiplication, division, addition, and subtraction.
+        \pause \item Write a C file, \textof{fractions.c}, that defines the functions declared in \textpf{fractions.h}.
+        \pause \item Don't worry about keeping fractions in simplest form.
+    \end{itemize}
+\end{frame}
+
+\end{document}
