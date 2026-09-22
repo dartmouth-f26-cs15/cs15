@@ -131,8 +131,8 @@ unsigned char my_log2(unsigned long x);
     \begin{itemize}
         \pause \item C provides a few keywords for defining new data types.
         \pause \item \textpf{struct} is one such keyword.
-        \pause \item The \textpf{struct} keyword allows for the definition of ``record types," (also known as ``product types").
-        \pause \item Basically, a \textpf{struct} is made by bundling together other data types.
+        \pause \item The \textpf{struct} keyword allows for the definition of ``record types," (aka ``product types").
+        \pause \item Basically, a \textpf{struct} is a type that is defined as a bundle of some other types.
     \end{itemize}
 \end{frame}
 
@@ -147,22 +147,68 @@ struct example_struct {
     \end{minted}
 \end{frame}
 
-\begin{frame}[fragile]{Populating a \textpf{struct}}
-    To access in the fields in a \textpf{struct}, use the \textpf{.} operator.
+\begin{frame}[fragile]{Instantiating a \textpf{struct}}
+    A \textpf{struct} can be instantiated in three ways:
+    \begin{itemize}
+        \pause \item Uninitialized
+        \pause \item Using an initializer list
+        \pause \item Using a designated initializer
+    \end{itemize}
+\end{frame}
 
-    \pause For example, to make a \textpf{struct example\_struct}, and set all of its fields to \textpf{100},
-    \begin{minted}{c}
+\begin{frame}[fragile]{Uninitialized \textpf{struct} Instantiation}
+    \begin{itemize}
+        \pause \item To instantiate a \textpf{struct example\_struct} named \textpf{s} without initializing its members, do this:
+            \begin{minted}{c}
 struct example_struct s;
-s.first_field = 100;
-s.second_field = 100;
-s.third_field = 100;
-    \end{minted}
+            \end{minted}
+        \pause \item Note that accessing uninitialized data is undefined behavior!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{struct} Initializer Lists}
+    \begin{itemize}
+        \pause \item To instantiate a \textpf{struct example\_struct} named \textpf{s} using an initializer list, do this:
+            \begin{minted}{c}
+struct example_struct s = {255, -1, 1000};
+            \end{minted}
+        \pause \item This sets \textpf{first\_field} to 255, \textpf{second\_field} to -1, and \textpf{third\_field} to 1000.
+        \pause \item If you use an initializer list with too few fields, the remaining fields are default-initialized (set to 0).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Designated \textpf{struct} Initialization}
+    \begin{itemize}
+        \pause \item To instantiate a \textpf{struct example\_struct} named \textpf{s} using a designated initializer, do this:
+            \begin{minted}{c}
+struct example_struct s = {
+    .first_field = 255,
+    .second_field = -1,
+    .third_field = 1000
+};
+            \end{minted}
+        \pause \item This sets \textpf{first\_field} to 255, \textpf{second\_field} to -1, and \textpf{third\_field} to 1000.
+        \pause \item Any fields not populated in the designated initializer are default-initialized.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{struct} Field Access}
+    \begin{itemize}
+        \pause \item To access in the fields in a \textpf{struct}, use the \textpf{.} operator.
+        \pause \item For example, the following code makes an uninitialized \textpf{struct example\_struct}, then populates its fields:
+            \begin{minted}{c}
+struct example_struct s;
+s.first_field = 255;
+s.second_field = -1;
+s.third_field = 1000;
+            \end{minted}
+    \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Activity \#2: Fractions!}
     \begin{itemize}
         \pause \item Write a header file, \textpf{fractions.h}, that defines a \textpf{struct} that represents a fraction, and declares functions for fraction multiplication, division, addition, and subtraction.
-        \pause \item Write a C file, \textof{fractions.c}, that defines the functions declared in \textpf{fractions.h}.
+        \pause \item Write a C file, \textpf{fractions.c}, that defines the functions declared in \textpf{fractions.h}.
         \pause \item Don't worry about keeping fractions in simplest form.
     \end{itemize}
 \end{frame}
