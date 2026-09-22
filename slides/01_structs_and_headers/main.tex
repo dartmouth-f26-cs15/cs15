@@ -96,6 +96,18 @@ main.c:2:20: error: implicit declaration of function ‘my_abs’ [-Wimplicit-fu
     \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Activity \#1.1: Telling the Compiler to Shut Up}
+    \begin{itemize}
+        \item Remember from last week that the linker links together multiple (compiled) object files into an executable file.
+        \item In order to do so, it needs to resolve function references (this also applies to some globally defined variables).
+    \end{itemize}
+
+        Example: \\
+        \{file1.c; file2.c\} -> compilation -> \{file1.o; file2.o\} -> linking -> \{my\_prog\}
+\end{frame}
+
+
+
 \begin{frame}[fragile]{Activity \#1.2: Why \textpf{-Wno-implicit-function-declaration} is Bad}
     \begin{center} \textbf{NEVER USE \textpf{-Wno-implicit-function-declaration}!!!} \end{center}
 
