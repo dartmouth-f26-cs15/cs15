@@ -57,13 +57,13 @@ geometry: margin=1in
 
 ### `git clone`
     - Purpose: Copies a remote Git repostiory to the current working directory
-    - Example: `git clone https://github.com/dartmouth-f26-cs15`
+    - Example: `git clone https://github.com/dartmouth-f26-cs15/cs15`
 ### `git pull`
     - Purpose: Fetches and merges the latest changes to a Git repository from a remote Git server.
 
 ## Typesetting
 
-### `pandoc`:
+### `pandoc`
     - Purpose: Compiles Markdown documents to various file formats.
     - Example: `pandoc -i shell.md -o shell.pdf`
     - Flags:
@@ -71,7 +71,7 @@ geometry: margin=1in
             - Specifies the input file
         - `-o some_output_file.pdf`
             - Specifies the output file
-### `lualatex`:
+### `lualatex`
     - Purpose: Compiles LaTeX documents to PDF.
     - Example: `lualatex -shell-escape todays_class_slides.tex`
     - Flags:
