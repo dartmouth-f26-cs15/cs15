@@ -135,7 +135,8 @@ unsigned char my_log2(unsigned long x);
         \pause \item This is still kind of ugly. We don't want to litter our programs with a million function declarations.
         \pause \item To avoid this, function declarations are typically placed in their own files, called header files.
         \pause \item Make a header file, \textpf{my\_math.h}, and move the declarations from \textpf{main.c} into it.
-        \pause \item Then, instruct the preprocessor to paste its contents into \textpf{main.c} by sticking \textpf{\#include "my\_math.h"} at the top of \textpf{main.c}.
+        \pause \item Then, instruct the preprocessor to paste its contents into \textpf{main.c} by sticking \textpf{\#include "my\_math.h"} at the top of \textpf{main.c} and \textpf{my\_math.c}.
+        \pause \item Why is it important to put this \textpf{\#include} in \textpf{my\_math.c} as well? % Because then the compiler will error when the declarations get out of sync with the definitions
     \end{itemize}
 \end{frame}
 
