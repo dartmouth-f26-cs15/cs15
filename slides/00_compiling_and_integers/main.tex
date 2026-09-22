@@ -1,0 +1,260 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{CS 15}
+    \begin{center} Intro to Systems Programming \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Expectations}
+    \begin{itemize}
+        \pause \item This is a \textbf{closed laptop} class.
+        \pause \item There will be in-class activities, during which computer use is permitted.
+        \pause \item Outside of these activities, \textbf{do not use your laptop}.
+        \pause \item During an activity, it is expected that your laptop is used \textbf{only for the activity}.
+        \pause \item If we spot you using your laptop for unrelated stuff, we may publicly ask you to stop.
+        \pause \item Repeat offenders will be asked to leave the classroom.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{C}
+    \pause C is known for being
+    \begin{itemize}
+        \pause \item fast, % if you know what you're doing
+        \pause \item portable, % if you know what you're doing
+        \pause \item non-portable, % if you use platform-specific features, which is easy to do (intentionally and unintentionally)
+        \pause \item low-level \pause (useful for ``close-to-the-metal" tasks),
+        \pause \item old, % around since the 70s
+        \pause \item hard to use correctly.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Machine Code}
+    \begin{itemize}
+        \pause \item A computer's native language is known as ``machine code."
+        \pause \item At the very bottom, your CPU's primary job is to interpret machine code.
+        \pause \item Your CPU doesn't know how to execute Python, or Java, or C directly. It can only execute machine code.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Interpreters}
+    \begin{itemize}
+        \pause \item If your CPU can only execute machine code, how do Python programs run?
+        \pause \item Your Python programs are interpreted at runtime by a native machine code program (the Python interpreter).
+        \pause \item This incurs overhead at runtime.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Compilers}
+    \begin{itemize}
+        \pause \item A compiler is a program that translates programs from one language to another.
+        \pause \item C programs are not usually interpreted directly.
+        \pause \item Instead, they are translated into machine code using a compiler, and that machine code is interpreted by the CPU.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Building C Programs}
+    There are 4 tools required to turn a C program into an executable:
+    \begin{enumerate}
+        \pause \item The C preprocessor, which evaluates special ``directives" in your \textpf{.c} file. producing a \textpf{.i} file.
+        \pause \item The C compiler, which translates the \textpf{.i} file into an assembly (\textpf{.s}) file.
+        \pause \item The assembler, which translates the assembly into machine code in a \textpf{.o} file.
+        \pause \item The linker, which links together \textpf{.o} file(s) into a single executable or library.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{The Compiler Driver}
+    \begin{itemize}
+        \pause \item A C compiler driver is a program that invokes the preprocessor, compiler, assembler, and linker for us, so that we can build C programs all in one step.
+        \pause \item There are 2 compiler drivers installed on Plink: \textpf{clang} and \textpf{gcc}.
+        \pause \item Most of the time, these can be used interchangeably. Try both!
+        \pause \item Often, people refer to the compiler driver as a ``compiler." This is synecdoche; it's okay that it's not strictly correct.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Simple C Program}
+    Please copy down this C program into a file named \textpf{simple.c} on Plink:
+    \inputminted{c}{./simple.c}
+\end{frame}
+
+\begin{frame}[fragile]{Explanation of \textpf{simple.c}}
+    \begin{itemize}
+        \pause \item \textpf{int}
+            \begin{itemize}
+                \pause \item The return type of the \textpf{main} function.
+            \end{itemize}
+        \pause \item \textpf{main}
+            \begin{itemize}
+                \pause \item The name of the \textpf{main} function.
+            \end{itemize}
+        \pause \item \textpf{(void)}
+            \begin{itemize}
+                \pause \item Indicates that \textpf{main} takes no arguments.
+                \pause \item You might expect that empty parentheses would indicate no arguments, but it actually indicates that the function accepts any number of arguments, and ignores them all.
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Running the Compiler Driver}
+    \begin{itemize}
+        \pause \item To use the \textpf{gcc} compiler driver to build \textpf{simple.c}, run
+        \begin{minted}{sh}
+            gcc ./simple.c
+        \end{minted}
+        \pause \item You should now have an executable named \textpf{a.out}.
+        \pause \item To execute \textpf{a.out}, run
+        \begin{minted}{sh}
+            ./a.out
+        \end{minted}
+        \pause \item To see the returned value from \textpf{main}, run
+        \begin{verbatim}
+            echo "$?"
+        \end{verbatim} % making this a minted would be nice, but editor isn't highlighting it properly due to the $.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Integer Types in C}
+    There are 5 basic integer types in C:
+    \begin{itemize}
+        \pause \item \textpf{char} (smallest),
+        \pause \item \textpf{short} (small),
+        \pause \item \textpf{int} (medium),
+        \pause \item \textpf{long} (large).
+        \pause \item \textpf{long long} (largest).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Integer Sizes}
+    \begin{itemize}
+        \pause \item C is designed for portability, so the language standard doesn't specify the number of bytes required to store each of the integer types.
+        \pause \item For this reason, we need the \textpf{sizeof} operator.
+        \pause \item The \textpf{sizeof} operator returns the number of bytes used to represent its operand.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Activity \#1: \textpf{sizeof}}
+    Modify \textpf{simple.c} to determine the sizes of the 5 basic integer types on Plink.
+\end{frame}
+
+\begin{frame}[fragile]{Signedness}
+    \begin{itemize}
+        \pause \item All integers in C are either \textpf{signed} or \textpf{unsigned}.
+        \pause \item Unsigned integers can represent only nonnegative values.
+        \pause \item Signed integers can represent both negative and nonnegative values.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Why would we ever want to use unsigned integers?}
+    \begin{itemize}
+        \pause \item They might better match the problem domain.
+            \begin{itemize}
+                \pause \item e.g., quantities, timestamps, etc.
+            \end{itemize}
+        \pause \item The positive range is larger!
+            \begin{itemize}
+                \pause \item The largest value that an \textpf{unsigned int} can store is greater than the largest value that a \textpf{signed int} can store.
+            \end{itemize}
+        \pause \item They are defined to wrap around.
+            \begin{itemize}
+                \pause \item Adding 1 to the biggest \textpf{unsigned int} is guaranteed to be \textpf{0}.
+                \pause \item Adding 1 to the biggest \textpf{int} is \textbf{undefined}.
+            \end{itemize}
+        \pause \item Some style guides (e.g., Google's) say that you should never use unsigned types at all. Ask me about this if you're curious why.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Integer Ranges}
+    \begin{itemize}
+        \pause \item 1 bit can store one of $2^1 = 2$ distinct values: \textpf{0} or \textpf{1}.
+        \pause \item 2 bits can store one of $2^2 = 4$ distinct bitstrings: \textpf{00}, \textpf{01}, \textpf{10}, or \textpf{11}.
+        \pause \item Therefore, \textpf{char}, which is a 1-byte (8-bit) integer type, can store one of $2^8 = 256$ distinct bitstrings.
+        \pause \item For \textpf{unsigned char}, we treat those bitstrings as representing $0$-$255$, inclusive.
+        \pause \item For \textpf{signed char}, we treat those bitstrings as representing $-128$-$127$, inclusive.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Integer Literals}
+    In C, integer literals (e.g., the \textpf{5} in \textpf{return x + 5;}) have the type \textpf{int}.
+
+    \pause To construct literals of other integer types, append the following suffixes to the literal:
+    \begin{itemize}
+        \pause \item \textpf{l}: long
+        \pause \item \textpf{ll}: long long
+        \pause \item \textpf{u}: unsigned int
+        \pause \item \textpf{ul}: unsigned long
+        \pause \item \textpf{ull}: unsigned long long
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Integer Operators}
+    \begin{itemize}
+        \pause \item \textpf{+}: Addition
+        \pause \item \textpf{-}: Subtraction
+        \pause \item \textpf{*}: Multiplication
+        \pause \item \textpf{/}: Division (rounds toward 0)
+        \pause \item \textpf{\%}: Remainder
+        \pause \item ...and there are more, but we'll cover them later :)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Activity \#2: The math is all weird!}
+    \begin{itemize}
+        \pause \item These operators do not behave the way you expect!
+        \pause \item Enumerate as many weird properties of C's math as you can.
+        % Give them a few minutes, then collect these things on the board.
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Activity \#3: \textpf{abs}}
+    \begin{center} Write a C function, \textpf{my\_abs(signed char x)}, that returns the absolute value of \textpf{x}. \end{center}
+
+    \begin{itemize}
+        \pause \item What is the most appropriate return type for your function?
+            \begin{itemize}
+                \pause \item \textpf{char}, \textpf{short}, \textpf{int}, or \textpf{long}?
+                \pause \item \textpf{signed} or \textpf{unsigned}?
+            \end{itemize}
+        \pause \item Test your function on a wide range of inputs. Does it work? % If they chose (signed) char as their return type, they won't be able to run abs(-128).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Activity \#4: $\log_2$}
+
+    \begin{itemize}
+        \pause \item Write a C function, \textpf{my\_log2(unsigned long x)}, that returns the $\log_2$ of \textpf{x}, rounded down to the nearest integer.
+        \pause \item What should your function's return type should be?
+            \begin{itemize}
+                \pause \item \textpf{char}, \textpf{short}, \textpf{int}, or \textpf{long}?
+                \pause \item \textpf{signed} or \textpf{unsigned}?
+            \end{itemize}
+        \pause \item When you're done, try implementing this function recursively (without helper functions).
+    \end{itemize}
+\end{frame}
+
+\end{document}
