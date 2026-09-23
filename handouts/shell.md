@@ -57,6 +57,11 @@ geometry: margin=1in
 - Purpose: Deletes files
 - Example: `rm some_file.txt`
 
+### `mkdir`
+- Purpose: Creates a directory
+- Example: `mkdir some_empty_directory`
+
+
 ### `rmdir`
 - Purpose: Deletes empty directories
 - Example: `rmdir some_empty_directory`
