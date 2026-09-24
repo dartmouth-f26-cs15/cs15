@@ -259,7 +259,7 @@
         \pause \item Knowing this, how would you generically take the length of a nonempty array?
         \pause \item \textbf{Given an array \textpf{ary}, its length is}
         \begin{minted}{c}
-(sizeof ary) / (sizeof ary[0])
+            sizeof(ary)) / sizeof(ary[0])
         \end{minted}
     \pause \item Q: Try writing a function that takes as input an array of \textpf{unsigned int} and returns its length. Does it behave the way you expect?
     \end{itemize}
