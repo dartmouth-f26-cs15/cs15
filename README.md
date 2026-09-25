@@ -1,11 +1,12 @@
 # cs15
 
+This repository stores 3 things: lecture slides, handouts, and assignments.
+
 ## Please download this repository by running the following command on Plink:
+
 ```sh
 git clone https://github.com/dartmouth-f26-cs15/cs15
 ```
-
-This repository stores 3 things: lecture slides, handouts, and assignments.
 
 ## Lecture Slides
 
