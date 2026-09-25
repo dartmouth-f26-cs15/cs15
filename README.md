@@ -8,6 +8,12 @@ This repository stores 3 things: lecture slides, handouts, and assignments.
 git clone https://github.com/dartmouth-f26-cs15/cs15
 ```
 
+## Fetch the latest updates to this repository by running this command within the `cs15` directory:
+
+```sh
+git pull
+```
+
 ## Lecture Slides
 
 Lecture slides are distributed as LaTeX source code.
