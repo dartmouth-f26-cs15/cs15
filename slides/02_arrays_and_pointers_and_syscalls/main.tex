@@ -467,6 +467,14 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}{\textpf{\#pragma once}}
+    \begin{itemize}
+        \pause \item Sometimes, you want to ensure that a header isn't accidentally included multiple times in a file.
+        \pause \item Add \textpf{\#pragma once} at the top of the header file to achieve this effect.
+        \pause \item \textbf{Every header file you write for the rest of this class should have \textpf{\#pragma once} at the top.}
+    \end{itemize}
+\end{frame}
+
 \begin{frame}{Strings}
     \begin{itemize}
         \pause \item Strings are just \textpf{char *}s.
@@ -476,6 +484,21 @@
         \pause \item In C, it's traditional to use the 0 byte for this purpose.
     \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{String Literals}
+    C's string literals are automatically terminated with a 0 byte.
+
+    \pause e.g., the following are equivalent:
+    \pause
+    \begin{minted}{c}
+char s[] = {97, 98, 98, 0};
+    \end{minted}
+\pause
+    \begin{minted}{c}
+char s[] = "abc";
+    \end{minted}
+\end{frame}
+
 
 \begin{frame}{Activity: Character Count}
     \begin{itemize}
