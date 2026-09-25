@@ -6,4 +6,4 @@
 *.out
 *.snm
 *.vrb
-_minted
+_minted*
