@@ -65,6 +65,9 @@ You may find these system header files useful:
 
 ## What to Submit
 
+Leave your submission in a directory named `libcs15` within your home directory.
+Your submission should contain the following files:
+
 - `close.c`
     - Contains your implementation of `cs15_close`.
 - `exit.c`
