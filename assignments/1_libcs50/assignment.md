@@ -2,9 +2,9 @@
 geometry: margin=1in
 ---
 
-# Assignment 1: `libcs50`, due Wednesday, September 30 at 11:59:59 PM
+# Assignment 1: `libcs15`, due Wednesday, September 30 at 11:59:59 PM
 
-Your task in this assignment is to build a library, `libcs50.a`, that implements a few useful functions from libc.
+Your task in this assignment is to build a library, `libcs15.a`, that implements a few useful functions from libc.
 
 During this task, you are not permitted to use any externally-defined functions except `syscall`, but using types and constants defined in system header files is permitted.
 
@@ -12,41 +12,41 @@ You do not need to properly handle errors that may result from system calls that
 
 Your library should globally define **only** the following functions (all other function definitions must be `static`):
 
-- `char *cs50_strcat(char *dst, char const *src)`
+- `char *cs15_strcat(char *dst, char const *src)`
     - See `man 3 strcat` for the expected behavior of this function.
-- `int cs50_strcmp(char const *s1, char const *s2)`
+- `int cs15_strcmp(char const *s1, char const *s2)`
     - See `man 3 strcmp` for the expected behavior of this function.
-- `char *cs50_strcpy(char *dst, char const *src)`
+- `char *cs15_strcpy(char *dst, char const *src)`
     - See `man 3 strcpy` for the expected behavior of this function.
-- `size_t cs50_strlen(char const *s)`
+- `size_t cs15_strlen(char const *s)`
     - See `man 3 strlen` for the expected behavior of this function.
-- `char *cs50_strncpy(char *dst, char const *src, size_t dsize)`
+- `char *cs15_strncpy(char *dst, char const *src, size_t dsize)`
     - See `man 3 strncpy` for the expected behavior of this function.
-- `int cs50_close(int fd)`
+- `int cs15_close(int fd)`
     - See `man 2 close` for the expected behavior of this function.
-- `void cs50_exit(int status)`
+- `void cs15_exit(int status)`
     - See `man 3 exit` for the expected behavior of this function.
-- `int cs50_getchar(void)`
+- `int cs15_getchar(void)`
     - See `man 3 getchar` for the expected behavior of this function.
     - Your implementation should properly handle reaching the end of the file.
-- `int cs50_open(char const *pathname, int flags, mode_t mode)`
+- `int cs15_open(char const *pathname, int flags, mode_t mode)`
     - See `man 2 open` for the expected behavior of this function.
     - Even though the `open` man page shows the `mode` argument as optional, you should make it required.
-- `int cs50_puts(char const *s)`
+- `int cs15_puts(char const *s)`
     - See `man 3 puts` for the expected behavior of this function.
-- `ssize_t cs50_read(int fd, void *buf, size_t count)`
+- `ssize_t cs15_read(int fd, void *buf, size_t count)`
     - See `man 2 read` for the expected behavior of this function.
-- `ssize_t cs50_write(int fd, void const *buf, size_t count)`
+- `ssize_t cs15_write(int fd, void const *buf, size_t count)`
     - See `man 2 write` for the expected behavior of this function.
 
-- `void cs50_print_ulong_dec(unsigned long i)`
+- `void cs15_print_ulong_dec(unsigned long i)`
     - This function should write the value of `i`, in base 10, to `stdout`.
     - (You may assume that any `write` system calls do not error)
-- `void cs50_print_ulong_hex(unsigned long i)`
+- `void cs15_print_ulong_hex(unsigned long i)`
     - This function should write the value of `i`, in base 16, to `stdout`.
     - (Use the digits 0123456789abcdef)
     - (You may assume that any `write` system calls do not error)
-- `void cs50_print_ulong_bin(unsigned long i)`
+- `void cs15_print_ulong_bin(unsigned long i)`
     - This function should write the value of `i`, in base 2, to `stdout`.
     - (You may assume that any `write` system calls do not error)
 
@@ -66,32 +66,32 @@ You may find these system header files useful:
 ## What to Submit
 
 - `close.c`
-    - Contains your implementation of `cs50_close`.
+    - Contains your implementation of `cs15_close`.
 - `exit.c`
-    - Contains your implementation of `cs50_exit`.
+    - Contains your implementation of `cs15_exit`.
 - `getchar.c`
-    - Contains your implementation of `cs50_getchar`.
+    - Contains your implementation of `cs15_getchar`.
 - `open.c`
-    - Contains your implementation of `cs50_open`.
+    - Contains your implementation of `cs15_open`.
 - `puts.c`
-    - Contains your implementation of `cs50_puts`.
+    - Contains your implementation of `cs15_puts`.
 - `read.c`
-    - Contains your implementation of `cs50_read`.
+    - Contains your implementation of `cs15_read`.
 - `strcat.c`
-    - Contains your implementation of `cs50_strcat`.
+    - Contains your implementation of `cs15_strcat`.
 - `strcmp.c`
-    - Contains your implementation of `cs50_strcmp`.
+    - Contains your implementation of `cs15_strcmp`.
 - `strcpy.c`
-    - Contains your implementation of `cs50_strcpy`.
+    - Contains your implementation of `cs15_strcpy`.
 - `strlen.c`
-    - Contains your implementation of `cs50_strlen`.
+    - Contains your implementation of `cs15_strlen`.
 - `strncpy.c`
-    - Contains your implementation of `cs50_strncpy`.
+    - Contains your implementation of `cs15_strncpy`.
 - `print.c`
-    - Contains your implementation of `cs50_print_ulong_dec`, `cs50_print_ulong_hex`, and `cs50_print_ulong_bin`.
+    - Contains your implementation of `cs15_print_ulong_dec`, `cs15_print_ulong_hex`, and `cs15_print_ulong_bin`.
 - `write.c`
-    - Contains your implementation of `cs50_write`.
-- `libcs50.h`
+    - Contains your implementation of `cs15_write`.
+- `libcs15.h`
     - Contains declarations of all of the functions listed above.
 
 ## Testing
@@ -103,16 +103,16 @@ for c_file in {close,exit,getchar,open,puts,read,strcat,strcmp,strcpy,strlen,str
 done
 ```
 
-We will then combine those object files into a static library, `libcs50.a` as follows:
+We will then combine those object files into a static library, `libcs15.a` as follows:
 ```sh
-ar -rs libcs50.a {close,exit,getchar,open,puts,read,strcat,strcmp,strcpy,strlen,strncpy,print,write}.o
+ar -rs libcs15.a {close,exit,getchar,open,puts,read,strcat,strcmp,strcpy,strlen,strncpy,print,write}.o
 ```
 
 After that, we'll link the static library with a testing harness (`test.c`) to produce an executable.
 
 Our testing harness looks like this:
 ```C
-#include "libcs50.h"
+#include "libcs15.h"
 
 int main(void) {
     // A bunch of tests for your library that
@@ -122,9 +122,9 @@ int main(void) {
 }
 ```
 
-We will compile our testing harness (`test.c`) and link it with your static library (`libcs50.a`) to produce an executable (`test`) as follows:
+We will compile our testing harness (`test.c`) and link it with your static library (`libcs15.a`) to produce an executable (`test`) as follows:
 ```sh
-gcc -fsanitize=address,undefined -ggdb -O0 -Wall -Wextra -Wpedantic -Wvla test.c libcs50.a -o test
+gcc -fsanitize=address,undefined -ggdb -O0 -Wall -Wextra -Wpedantic -Wvla test.c libcs15.a -o test
 ```
 
 We'll then run that executable and use its output to grade your submission.
