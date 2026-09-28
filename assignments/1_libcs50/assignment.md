@@ -44,7 +44,7 @@ Your library should globally define **only** the following functions (all other 
     - (You may assume that any `write` system calls do not error)
 - `void cs15_print_ulong_hex(unsigned long i)`
     - This function should write the value of `i`, in base 16, to `stdout`.
-    - (Use the digits 0123456789abcdef)
+    - (Use the digits `0123456789abcdef`)
     - (You may assume that any `write` system calls do not error)
 - `void cs15_print_ulong_bin(unsigned long i)`
     - This function should write the value of `i`, in base 2, to `stdout`.
