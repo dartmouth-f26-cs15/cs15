@@ -23,7 +23,7 @@ In order to compile the LaTeX source code, `cd` into the appropriate subdirector
 For example, to compile the slides from the first class,
 ```bash
 cd ./slides/00_compiling_and_integers
-lualatex -shell-escape main.tex
+lualatex -shell-escape main.tex && lualatex -shell-escape main.tex
 ```
 That should produce a file named `main.pdf` that you can `scp` to your laptop and view.
 
