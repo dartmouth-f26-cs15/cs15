@@ -24,45 +24,6 @@
 \newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
 
 \begin{document}
-
-\begin{frame}[fragile]{\textpf{argc} and \textpf{argv}}
-    So far, we've used \textpf{main} functions with the following declaration:
-    \begin{minted}{c}
-int main(void);
-    \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{\textpf{argc} and \textpf{argv}}
-    It's also typical to use this declaration:
-    \begin{minted}{c}
-int main(int argc, char **argv);
-    \end{minted}
-\end{frame}
-
-\begin{frame}[fragile]{\textpf{argc} and \textpf{argv}}
-    \begin{itemize}
-        \pause \item \textpf{argv} is an array of strings containing the \textit{command line arguments} passed to this program.
-        \pause \item \textpf{argc} is its length.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{\textpf{argv} is not \textpf{stdin}}
-    \begin{itemize}
-        \pause \item \textpf{argv} is the vector of strings passed to the program \textit{as arguments on the command line}.
-        \pause \item \textpf{stdin} is a file descriptor that represents the input to the program \textit{at runtime}.
-        \pause \item Example in terminal!
-    \end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{Activity: Implement \textpf{echo}}
-    \begin{itemize}
-        \pause \item The \textpf{echo} program writes its arguments to \textpf{stdout}, separated by spaces.
-        \pause \item e.g., \textpf{echo a b c} should write ``\textpf{a b c}" to \textpf{stdout}.
-        \pause \item What do you notice about \textpf{argv[0]}?
-    \end{itemize}
-\end{frame}
-
 \section{Binary and Hex}
 
 \begin{frame}{Binary and Hexadecimal}
@@ -71,6 +32,15 @@ int main(int argc, char **argv);
         \pause \item Why do we use hex?
     \end{itemize}
     % Whiteboard as necessary here.
+\end{frame}
+
+\section{Let's do some counting!}
+
+\begin{frame}{Counting in binary}
+    \begin{itemize}
+        \item Count from $2^0$ to $2^4$ in binary on paper.
+        \item Same thing in hex.
+    \end{itemize}
 \end{frame}
 
 \section{2's Complement}
@@ -138,6 +108,47 @@ int main(int argc, char **argv);
     Cons
     \begin{itemize}
         \pause \item It's more difficult to understand.
+    \end{itemize}
+\end{frame}
+
+
+\section{Argc and argv}
+
+\begin{frame}[fragile]{\textpf{argc} and \textpf{argv}}
+    So far, we've used \textpf{main} functions with the following declaration:
+    \begin{minted}{c}
+int main(void);
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{argc} and \textpf{argv}}
+    It's also typical to use this declaration:
+    \begin{minted}{c}
+int main(int argc, char **argv);
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{argc} and \textpf{argv}}
+    \begin{itemize}
+        \pause \item \textpf{argv} is an array of strings containing the \textit{command line arguments} passed to this program.
+        \pause \item \textpf{argc} is its length.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{argv} is not \textpf{stdin}}
+    \begin{itemize}
+        \pause \item \textpf{argv} is the vector of strings passed to the program \textit{as arguments on the command line}.
+        \pause \item \textpf{stdin} is a file descriptor that represents the input to the program \textit{at runtime}.
+        \pause \item Example in terminal!
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Activity: Implement \textpf{echo}}
+    \begin{itemize}
+        \pause \item The \textpf{echo} program writes its arguments to \textpf{stdout}, separated by spaces.
+        \pause \item e.g., \textpf{echo a b c} should write ``\textpf{a b c}" to \textpf{stdout}.
+        \pause \item What do you notice about \textpf{argv[0]}?
     \end{itemize}
 \end{frame}
 
