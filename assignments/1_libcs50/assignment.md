@@ -38,7 +38,6 @@ Your library should globally define **only** the following functions (all other 
     - See `man 2 read` for the expected behavior of this function.
 - `ssize_t cs15_write(int fd, void const *buf, size_t count)`
     - See `man 2 write` for the expected behavior of this function.
-
 - `void cs15_print_ulong_dec(unsigned long i)`
     - This function should write the value of `i`, in base 10, to `stdout`.
     - (You may assume that any `write` system calls do not error)

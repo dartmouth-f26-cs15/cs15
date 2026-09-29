@@ -1,0 +1,144 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{\textpf{argc} and \textpf{argv}}
+    So far, we've used \textpf{main} functions with the following declaration:
+    \begin{minted}{c}
+int main(void);
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{argc} and \textpf{argv}}
+    It's also typical to use this declaration:
+    \begin{minted}{c}
+int main(int argc, char **argv);
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{argc} and \textpf{argv}}
+    \begin{itemize}
+        \pause \item \textpf{argv} is an array of strings containing the \textit{command line arguments} passed to this program.
+        \pause \item \textpf{argc} is its length.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{argv} is not \textpf{stdin}}
+    \begin{itemize}
+        \pause \item \textpf{argv} is the vector of strings passed to the program \textit{as arguments on the command line}.
+        \pause \item \textpf{stdin} is a file descriptor that represents the input to the program \textit{at runtime}.
+        \pause \item Example in terminal!
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Activity: Implement \textpf{echo}}
+    \begin{itemize}
+        \pause \item The \textpf{echo} program writes its arguments to \textpf{stdout}, separated by spaces.
+        \pause \item e.g., \textpf{echo a b c} should write ``\textpf{a b c}" to \textpf{stdout}.
+        \pause \item What do you notice about \textpf{argv[0]}?
+    \end{itemize}
+\end{frame}
+
+\section{Binary and Hex}
+
+\begin{frame}{Binary and Hexadecimal}
+    \begin{itemize}
+        \pause \item Why do we use binary?
+        \pause \item Why do we use hex?
+    \end{itemize}
+    % Whiteboard as necessary here.
+\end{frame}
+
+\section{2's Complement}
+
+\begin{frame}{Negative Binary Numbers}
+    How should we represent negative numbers in binary?
+\end{frame}
+
+\begin{frame}{Take 1: Sign Bit}
+    \begin{itemize}
+        \pause \item Reserve the most significant bit as the sign bit.
+        \pause \item To negate a number, flip its sign bit.
+    \end{itemize}
+
+    \begin{align*}
+        \texttt{bin}(-25) &= \texttt{set\_msb}(\texttt{bin}(25)) \\
+                          &= \texttt{set\_msb}(\texttt{0b}00011001) \\
+                          &= \texttt{0b}10011001
+    \end{align*}
+\end{frame}
+
+\begin{frame}{Sign Bit Pros and Cons}
+    Pros
+    \begin{itemize}
+        \pause \item It's easy for people to understand.
+    \end{itemize}
+
+    \pause
+
+    Cons
+    \begin{itemize}
+        \pause \item +0 and -0 are distinct.
+        \pause \item Calculations are not consistent with unsigned numbers.
+    \end{itemize}
+
+    \pause
+    \begin{center}Whiteboard!\end{center}
+\end{frame}
+
+\begin{frame}{Take 2: 2's Complement}
+    \begin{itemize}
+        \pause \item To negate a number, flip all of its bits, then add 1.
+        \pause \item This is how nearly all modern computers represent negative numbers.
+    \end{itemize}
+
+    \pause \begin{align*}
+        \texttt{bin}(-25) &= \texttt{flip\_bits}(\texttt{bin}(25)) + \texttt{0b}1 \\
+                          &= \texttt{flip\_bits}(\texttt{0b}00011001) + \texttt{0b}1 \\
+                          &= \texttt{0b}11100110 + \texttt{0b}1 \\
+                          &= \texttt{0b}11100111
+    \end{align*}
+\end{frame}
+
+\begin{frame}{2's Complement Pros and Cons}
+    Pros
+    \begin{itemize}
+        \pause \item There's only one zero.
+        \pause \item Calculations are consistent with unsigned numbers!
+    \end{itemize}
+
+    \pause
+    \begin{center}Whiteboard!\end{center} % -18 -38
+    \pause
+
+    Cons
+    \begin{itemize}
+        \pause \item It's more difficult to understand.
+    \end{itemize}
+\end{frame}
+
+\end{document}
