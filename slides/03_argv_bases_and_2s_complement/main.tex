@@ -25,16 +25,14 @@
 
 \begin{document}
 \section{Binary and Hex}
-
-
-    \begin{frame}{Learning objectives}
-        \begin{itemize}
-            \item Understanding numbering basics
-            \item How to count in different bases
-            \item Understanding how signed and unsigned numbers are encoded
-            \item Understanding argv, program arguments and arrays of pointers
-        \end{itemize}
-    \end{frame}
+\begin{frame}{Learning objectives}
+    \begin{itemize}
+        \item Understanding numbering basics
+        \item How to count in different bases
+        \item Understanding how signed and unsigned numbers are encoded
+        \item Understanding argv, program arguments and arrays of pointers
+    \end{itemize}
+\end{frame}
 
 \begin{frame}{Binary and Hexadecimal}
     \begin{itemize}
@@ -55,6 +53,27 @@
             \pause \item How much is $0xff + 1$?
             \pause \item How much is $0x200 -1$?
 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Integer literals in C}
+    In C, the base of an integer literal is specified by special prefixes:
+    \begin{itemize}
+        \pause \item \textpf{0b} indicates base 2
+        \pause \item \textpf{0} indicates base 8
+        \pause \item \textpf{0x} indicates base 16
+        \pause \item (no prefix indicates base 10)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Activity: Arithmetic on Paper}
+    Please compute the following (assume C integer literal syntax).
+    \begin{itemize}
+        \item \textpf{0b1010 * 2} (give answer in base 2)
+        \item \textpf{0bcoo1 * 16} (give answer in base 16)
+        \item \textpf{0b0101 + 0b1011} (give answer in base 2)
+        \item \textpf{0xda1e + 0xdafe} (give answer in base 16)
+        \item \textpf{0xc001 + 010} (give answer in base 16)
     \end{itemize}
 \end{frame}
 
@@ -127,7 +146,7 @@
 \end{frame}
 
 
-\section{Argc and argv}
+\section{\textpf{argc} and \textpf{argv}}
 
 \begin{frame}[fragile]{\textpf{argc} and \textpf{argv}}
     So far, we've used \textpf{main} functions with the following declaration:
@@ -152,7 +171,7 @@ int main(int argc, char **argv);
 
 \begin{frame}[fragile]{\textpf{argv} is not \textpf{stdin}}
     \begin{itemize}
-        \pause \item \textpf{argv} is the vector of strings passed to the program \textit{as arguments on the command line}.
+        \pause \item \textpf{argv} is the array of argument strings passed to the program on the command line \textit{before the program runs}.
         \pause \item \textpf{stdin} is a file descriptor that represents the input to the program \textit{at runtime}.
         \pause \item Example in terminal!
     \end{itemize}
