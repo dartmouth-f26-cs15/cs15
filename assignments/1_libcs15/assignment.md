@@ -56,6 +56,8 @@ You may find these system header files useful:
     - Types: `size_t`
 - `<sys/types.h>`
     - Types: `mode_t`, `ssize_t`
+- `<stdio.h>`
+    - Constants: `EOF`
 - `<sys/syscall.h>`
     - Constants: `SYS_close`, `SYS_write`, `SYS_read`, `SYS_exit`, `SYS_open`
 - `<unistd.h>`
