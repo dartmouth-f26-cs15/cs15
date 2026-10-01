@@ -1,0 +1,87 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}{Learning objectives}
+    \begin{itemize}
+        \item Sign extension
+        \item Bitwise operations
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{2\'s complement}
+        Recall how signed numbers are represented in binary: 2\'s complement
+        \begin{itemize}
+            \item To negate a number, flip all the bits and add one
+        \end{itemize}
+\end{frame}
+
+\section{Sign extension}
+
+\begin{frame}[fragile]{Example Program}
+    What does this program do?
+    \begin{center}
+        \begin{minted}{c}
+#include <stdint.h>
+#include <stdio.h>
+
+int main(void) {
+    int8_t i8 = -1;
+    int16_t i16 = i8;
+}
+        \end{minted}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Sign Extension}
+    \begin{itemize}
+        \pause \item When converting a negative integer from a smaller bitwidth to a larger bitwidth, you need to fill the new bits with \texttt{1}s in order to preserve the original integer's value.
+    \end{itemize}
+
+    \pause For example,
+    \begin{align*}
+        \texttt{(int16\_t)(int8\_t)(-1)} &= \texttt{(int16\_t)0b11111111} \\
+                                         &= \texttt{0b}\underbrace{\texttt{11111111}}_\text{(8 new \texttt{1}s)}\texttt{11111111} \\
+                                         &= \texttt{(int16\_t)(-1)}
+    \end{align*}
+\end{frame}
+
+\begin{frame}{Sign Extension}
+    \begin{itemize}
+        \pause \item When converting a nonnegative integer from a smaller bitwidth to a larger bitwidth, you need to fill the new bits with \texttt{0}s in order to preserve the original integer's value.
+    \end{itemize}
+
+    \pause For example,
+    \begin{align*}
+        \texttt{(int16\_t)(int8\_t)(127)} &= \texttt{(int16\_t)0b01111111} \\
+                                          &= \texttt{0b}\underbrace{\texttt{00000000}}_\text{(8 new \texttt{0}s)}\texttt{01111111} \\
+                                          &= \texttt{(int16\_t)(127)}
+    \end{align*}
+\end{frame}
+
+
+\end{document}
