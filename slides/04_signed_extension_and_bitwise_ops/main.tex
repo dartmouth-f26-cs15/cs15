@@ -83,5 +83,85 @@ int main(void) {
     \end{align*}
 \end{frame}
 
+\begin{frame}[fragile]{Terminology}
+    \begin{itemize}
+        \pause \item \textit{bit}: A system with exactly 2 states, typically called ``0" and ``1."
+        \pause \item \textit{to set a bit}: To set a bit's state to 1.
+        \pause \item \textit{to unset (clear) a bit}: To set a bit's state to 0.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Bitwise Operations}
+    Here are a bunch of useful operators in C:
+    \begin{itemize}
+        \pause \item \textpf{<<}: Left Shift
+        \pause \item \textpf{>>}: Right Shift
+        \pause \item \textpf{\&}: Bitwise AND
+        \pause \item \textpf{|}: Bitwise OR
+        \pause \item \textpf{\^{}}: Bitwise XOR
+        \pause \item \textpf{\textasciitilde}: Bitwise NOT
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{<<}: Left Shift}
+    \begin{itemize}
+        \pause \item Equivalently: multiplying by a power of 2.
+        \pause \item How do you multiply a \textpf{uint64\_t} by 5 using only left shift and addition?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{>>}: Right Shift}
+    \begin{itemize}
+        \pause \item Equivalently: integer dividing by a power of 2 (\textpf{//} from Python).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{\&}: Bitwise AND}
+    \begin{itemize}
+        \pause \item Primary use: unsetting bits.
+        \pause \item Equivalently: bitwise multiplication.
+        \pause \item If you have a \textpf{uint64\_t}, how could you get its value mod 512 using only \textpf{\&}?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{|}: Bitwise OR}
+    \begin{itemize}
+        \pause \item Primary use: setting bits.
+        \pause \item Equivalently: addition without carry.
+        \pause \item If you have a \textpf{uint64\_t}, how could you set its $n^\text{th}$ bit using bitwise OR?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{\^{}}: Bitwise XOR}
+    \begin{itemize}
+        \pause \item Primary use: ``combining" values, flipping bits.
+        \pause \item Equivalently: Bitwise \textpf{!=}.
+        \pause \item If you have two \textpf{uint64\_t}s, how could swap them, using only \textpf{\^{}}, and no temporary variables?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{\textasciitilde}: Bitwise NOT}
+    \begin{itemize}
+        \pause \item Inverts every bit in a number.
+        \pause \item Equivalently: 2's complement minus 1.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Why?}
+    \begin{itemize}
+        \pause \item \textbf{Performance!}
+        \pause \item Most bitwise operations are single instructions for the CPU.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Activity: Bit Tricks}
+    \begin{enumerate}
+        \pause \item Write a function that takes a \textpf{uint64\_t} $i$ and a bit position $n$, and returns $i$ with the $n^\text{th}$ bit set.
+        \pause \item Write a function that takes a \textpf{uint64\_t} $i$ and a bit position $n$, and returns $i$ with the $n^\text{th}$ bit unset.
+        \pause \item Write a function that takes a \textpf{uint64\_t} $i$ and a bit position $n$, and returns the $n^\text{th}$ bit of $i$.
+        \pause \item Write a function that takes a \textpf{uint64\_t}, and returns the index of its highest set bit. Does this seem familiar?
+        \pause \item Write a function that multiplies its argument by 23, using only bitwise operations and addition.
+    \end{enumerate}
+\end{frame}
 
 \end{document}
