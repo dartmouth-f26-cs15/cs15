@@ -37,7 +37,7 @@
 \begin{frame}{Binary and Hexadecimal}
     \begin{itemize}
         \item What is binary? What base is that? When do we use it?
-        \pause \item What base are natural numbers?
+        \pause \item What base do humans usually use?
         \pause \item What is hexadecimal (often referred to as just ``hex'')? Why do we use it?
     \end{itemize}
     % Whiteboard as necessary here.
@@ -49,10 +49,9 @@
     \begin{itemize}
         \item Count from $2^0$ to $2^4$ in binary on paper.
         \item Same thing in hex.
-            \pause \item Now let's do some additions and substractions!
-            \pause \item How much is $0xff + 1$?
-            \pause \item How much is $0x200 -1$?
-
+            \pause \item Now let's do some additions and subtractions!
+            \pause \item How much is $ff + 1$? (in base 16)
+            \pause \item How much is $200 -1$ (in base 16)
     \end{itemize}
 \end{frame}
 
@@ -180,9 +179,8 @@ int main(int argc, char **argv);
 
 \begin{frame}[fragile]{Activity: Implement \textpf{echo}}
     \begin{itemize}
-        \pause \item The \textpf{echo} program writes its arguments to \textpf{stdout}, separated by spaces.
-        \pause \item e.g., \textpf{echo a b c} should write ``\textpf{a b c}" to \textpf{stdout}.
-        \pause \item What do you notice about \textpf{argv[0]}?
+        \pause \item The \textpf{echo} program writes its arguments to \textpf{stdout}, separated by spaces, and followed by a newline.
+        \pause \item e.g., \textpf{echo a b c} should write ``\textpf{a b c}\n" to \textpf{stdout}.
     \end{itemize}
 \end{frame}
 
