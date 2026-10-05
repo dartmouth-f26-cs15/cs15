@@ -1,0 +1,61 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{Logistics}
+    \begin{itemize}
+        \item The exam is on Tuesday night, 6:00-8:00. If you can't make this time, let us know ASAP.
+        \item Topics covered will be
+            \begin{itemize}
+                \item integers
+                \item structs
+                \item arrays
+                \item pointers
+                \item \textpf{argc} and \textpf{argv}
+                \item syscalls
+                \item binary and hex
+                \item 2's complement
+                \item sign-extension
+            \end{itemize}
+        \item Quizzes are now graded for completion.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{const}}
+    Example!
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{printf}}
+    Example!
+\end{frame}
+
+\begin{frame}[fragile]{Activity}
+    Implement a function \textpf{atoul}, which takes 2 arguments, a string \textpf{s} and an \textpf{unsigned char b} between 1 and 16, and returns the \textpf{unsigned long} obtained by parsing \textpf{s} in base \textpf{b}.
+
+    For example, \textpf{atoul("123", 10)} should return \textpf{123}, and \textpf{atoul("100", 2)} should return 4.
+\end{frame}
+
+\end{document}
