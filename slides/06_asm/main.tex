@@ -1,0 +1,159 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{The CPU}
+    \begin{itemize}
+        \pause \item The CPU is the ``brain" of the computer.
+        \pause \item CPUs have a fixed pool of operations that they can compute.
+        \pause \item Each of these operations is known as an \textit{instruction}.
+        \pause \item The CPU reads instructions encoded in ``machine code."
+        \pause \item Machine code is annoying to write by hand, so humans typically write instructions in ``assembly language," which gets translated to machine code by an ``assembler."
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The Memory Hierarchy}
+    Computers store data in a few different ways:
+    \begin{itemize}
+        \pause \item Disk: Large capacity (TB), slow access times (~1 ms), nonvolatile.
+        \pause \item RAM: Medium capacity (GB), medium access times (~100 ns), volatile.
+        \pause \item Registers: Tiny capacity (KB), fast access times ($<$1ns), volatile.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{RAM}
+    \begin{itemize}
+        \pause \item RAM is typically what we mean when we say ``memory."
+        \pause \item Your mental model of the RAM should be that of a giant array of bytes.
+        \pause \item Your CPU can provide the RAM with an address (a pointer), and the RAM provides back the byte stored at that address.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Registers}
+    \begin{itemize}
+        \pause \item Registers are your CPU's ``scratch space."
+        \pause \item Nearly all instructions operate on a register in some way.
+        \pause \item Some registers are ``special-purpose," meaning that the CPU enforces that they must used for a particular purpose.
+        \pause \item Other registers are ``general-purpose," meaning that the CPU allows you to use them for whatever you want.
+        \pause \item On x86\_64, these are the general-purpose registers:
+            \begin{itemize}
+                \pause \item \textpf{rax}, \textpf{rbx}, \textpf{rcx}, \textpf{rdx}
+                \pause \item \textpf{rdi}, \textpf{rsi}
+                \pause \item \textpf{r8}, \textpf{r9}, ..., \textpf{r15}
+            \end{itemize}
+        \pause \item These are the special-purpose registers you need to remember:
+            \begin{itemize}
+                \pause \item \textpf{rip}
+                \pause \item \textpf{rsp}, \textpf{rbp} (sort of in-between)
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Register Widths}
+    \begin{itemize}
+        \pause \item All of these registers are 64 bits wide.
+        \pause \item Sometimes, you just want to consider a portion of a register.
+        \pause \item While masking is an option, you can also use a portion of a register directly.
+        \pause \item For example, portions of the \textpf{rax} register can be accessed directly under the names:
+            \begin{itemize}
+                \pause \item \textpf{eax}: The low 32 bits of \textpf{rax}.
+                \pause \item \textpf{ax}: The low 16 bits of \textpf{eax}.
+                \pause \item \textpf{al}: The low 8 bits of \textpf{ax}.
+            \end{itemize}
+        \pause \item Most x86 registers support accessing smaller portions of large registers through the same naming scheme.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{FDE}
+    From a high level, the CPU (\textbf{C}entral \textbf{P}rocessing \textbf{U}nit) does this, in a loop, forever:
+    \begin{enumerate}
+        \pause \item \textit{Fetch} an instruction from memory.
+        \pause \item \textit{Decode} the instruction.
+        \pause \item \textit{Execute} the instruction.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Where do we \textit{fetch}?}
+    From what memory address does the CPU find the next instruction?
+    \begin{itemize}
+        \pause \item It depends!
+        \pause \item On x86\_64, the special-purpose \textpf{rip} register stores the address of the next instruction to execute.
+        \pause \item This register is typically called the ``instruction pointer" or ``program counter."
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{What do we \textit{fetch}?}
+    To fetch an instruction, how many bytes need to be read from \textpf{*rip}?
+    \begin{itemize}
+        \pause \item It depends!
+        \pause \item On x86\_64, instructions are between 1 and 15 bytes long.
+        \pause \item x86 CPUs have complicated internal logic to determine how much to read during an instruction fetch.
+        \pause \item On ``RISC" CPUs (like ARM), instructions tend to be identically-sized.
+        \pause \item On ``CISC" CPUs (like x86), instructions tend to be variably-sized.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{How to \textit{decode} a fetched instruction}
+    Once an instruction has been fetched, it needs to be interpreted.
+    A typical x86 instruction has 3 parts:
+    \begin{enumerate}
+        \pause \item \textit{Prefix bytes}: Bytes at the beginning of the instruction that modify its behavior.
+        \pause \item \textit{Opcode}: A bit sequence that specifies the operation that the instruction signifies.
+        \pause \item \textit{Operands}: Bit sequences that specify the operands to the instruction.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{An Example}
+    \[\textpf{48 05 00 00 00 0f}\]
+
+    \pause \begin{center}...decodes to...\end{center}
+
+    \pause \[\overbrace{\textpf{48 05}}^{\textpf{add rax}} \underbrace{\textpf{00 00 00 0f}}_{\textpf{0x0f000000}}\]
+\end{frame}
+
+\begin{frame}[fragile]{A First Assembly Program}
+    \inputminted{asm}{return_25.s}
+\end{frame}
+
+\begin{frame}[fragile]{Building Assembly Programs}
+    Just give it a \textpf{.s} file extension, and pass it to the compiler driver!
+
+    \pause \begin{center} \textpf{gcc return\_25.s \&\& ./a.out; echo "\$?"} \end{center}
+    \pause \begin{center} \textpf{25} \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Activities}
+    Make assembly programs to
+    \begin{enumerate}
+        \item return the sum of the values in \textpf{rdi}, \textpf{rsi}, and \textpf{rax},
+        \item return the $\log_2$ of the value in \textpf{rdi},
+        \item return the square root of the value in \textpf{rdi},
+        \item return the max of the values in all of the general-purpose registers.
+    \end{enumerate}
+    Expect to encounter strange problems, and ask about them when they happen :)
+\end{frame}
+
+\end{document}
