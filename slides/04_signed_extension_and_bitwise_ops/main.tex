@@ -30,7 +30,6 @@
         \item Sign extension
         \item Bitwise operations
     \end{itemize}
-    
 \end{frame}
 
 \begin{frame}{2's complement}
@@ -40,10 +39,18 @@
         \end{itemize}
 \end{frame}
 
-\section{Sign extension}
+\begin{frame}[fragile]{\textpf{stdint.h}}
+    This header file provides type definitions for many integer types, including
+    \begin{itemize}
+        \pause \item \textpf{int8\_t}, \textpf{int16\_t}, \textpf{int32\_t}, \textpf{int64\_t}, 
+        \pause \item \textpf{uint8\_t}, \textpf{uint16\_t}, \textpf{uint32\_t}, \textpf{uint64\_t}, 
+    \end{itemize}
+
+    \pause These are often more useful than \textpf{char}, \textpf{short}, \textpf{int}, etc.
+\end{frame}
 
 \begin{frame}[fragile]{Example Program}
-    What does this program do?
+    Consider the following program:
     \begin{center}
         \begin{minted}{c}
 #include <stdint.h>
@@ -55,6 +62,7 @@ int main(void) {
 }
         \end{minted}
     \end{center}
+    What is the value of \textpf{i16}?
 \end{frame}
 
 \begin{frame}{Sign Extension}
@@ -107,12 +115,14 @@ int main(void) {
     \begin{itemize}
         \pause \item Equivalently: multiplying by a power of 2.
         \pause \item How do you multiply a \textpf{uint64\_t} by 5 using only left shift and addition?
+        \pause \item Whiteboard!
     \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{\textpf{>>}: Right Shift}
     \begin{itemize}
-        \pause \item Equivalently: integer dividing by a power of 2 (\textpf{//} from Python).
+        \pause \item Equivalently: unsigned integer dividing by a power of 2 (\textpf{//} from Python).
+        \pause \item Whiteboard!
     \end{itemize}
 \end{frame}
 
@@ -121,14 +131,15 @@ int main(void) {
         \pause \item Primary use: unsetting bits.
         \pause \item Equivalently: bitwise multiplication.
         \pause \item If you have a \textpf{uint64\_t}, how could you get its value mod 512 using only \textpf{\&}?
+        \pause \item Whiteboard!
     \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{\textpf{|}: Bitwise OR}
     \begin{itemize}
         \pause \item Primary use: setting bits.
-        \pause \item Equivalently: addition without carry.
         \pause \item If you have a \textpf{uint64\_t}, how could you set its $n^\text{th}$ bit using bitwise OR?
+        \pause \item Whiteboard!
     \end{itemize}
 \end{frame}
 
@@ -137,6 +148,7 @@ int main(void) {
         \pause \item Primary use: ``combining" values, flipping bits.
         \pause \item Equivalently: Bitwise \textpf{!=}.
         \pause \item If you have two \textpf{uint64\_t}s, how could swap them, using only \textpf{\^{}}, and no temporary variables?
+        \pause \item Whiteboard!
     \end{itemize}
 \end{frame}
 
@@ -144,13 +156,7 @@ int main(void) {
     \begin{itemize}
         \pause \item Inverts every bit in a number.
         \pause \item Equivalently: 2's complement minus 1.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Why?}
-    \begin{itemize}
-        \pause \item \textbf{Performance!}
-        \pause \item Most bitwise operations are single instructions for the CPU.
+        \pause \item Whiteboard!
     \end{itemize}
 \end{frame}
 
