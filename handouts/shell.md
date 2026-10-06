@@ -61,10 +61,22 @@ geometry: margin=1in
 - Purpose: Creates a directory
 - Example: `mkdir some_empty_directory`
 
-
 ### `rmdir`
 - Purpose: Deletes empty directories
 - Example: `rmdir some_empty_directory`
+
+### `cat`
+- Purpose: Prints the contents of file(s), or `stdin` if no files are passed.
+- Example: `cat some_file`
+- Example: `cat first_file second_file`
+- Example: `cat`
+
+### `hexdump`
+- Purpose: Prints the ASCII value (in hex) of each byte in a file. Useful for viewing files with unprintable bytes.
+- Example: `hexdump -C example.txt`
+- Flags:
+    - `-C`
+        - You'll nearly always want this one. This displays the contents of the file one byte at a time instead of the default of two bytes at a time. It also shows a character view on the right.
 
 ## Git
 
