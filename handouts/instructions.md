@@ -4,7 +4,7 @@ geometry: margin=0.5in
 
 # Assembly Reference
 
-This is a reference for **Intel syntax** x86 assembly.
+This is a reference for **Intel syntax** x86_64 assembly.
 
 ### General-Purpose Registers
 
