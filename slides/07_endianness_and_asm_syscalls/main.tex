@@ -94,18 +94,44 @@ set var i=0 ; sets i to 0
     \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{\textpf{.byte}}
+    \begin{itemize}
+        \pause \item \textpf{ret} is a one byte instruction. Its machine code is \textpf{0xc3}.
+        \pause \item When you write \textpf{ret} in your program, the assembler writes a \textpf{0xc3} byte into its output machine code file.
+        \pause \item You can also tell the assembler to emit this byte directly using the \textpf{.byte} directive:
+        \pause \item \textpf{.byte 0xc3}.
+        \pause \item Demo
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Data in \textpf{asm}}
+    \begin{itemize}
+        \pause \item Sometimes, you need to store more data than you can fit in the registers.
+        \pause \item You can tell the assembler to use a portion of your program for data storage with the \textpf{.data} directive.
+        \pause \item After that, use the \textpf{.byte} directive to reserve bytes provide an initial value for your variable.
+        \pause \item When you're done, tell the assembler to switch back to ``code mode" using the \textpf{.text} directive.
+        \pause \item Demo
+    \end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Motivating Example}
     What does this return?
-    \begin{minted}{c}
-#include <stdint.h>
+    \begin{minted}{asm}
+.data
 
-uint16_t f(void) {
-    uint8_t i[] = {0xFF, 0x00};
-    return *(uint16_t *)i
-}
+some_cool_bytes:
+    .byte 0xff, 0x00
+
+.text
+
+.global main
+main:
+    mov rax, 0
+    mov ax, word ptr [some_cool_bytes]
+    ret
     \end{minted}
 
-    \pause A: Either \texttt{0xFF00} or \texttt{0x00FF}, depending on the endianness of your CPU.
+    \pause A: It depends on the endianness of your CPU.
 \end{frame}
 
 \begin{frame}{Endianness}
@@ -154,12 +180,11 @@ uint16_t f(void) {
     That is, if we execute a 4 byte read at the address \texttt{0x4000}, then we're reading from addresses \texttt{0x4000}, \texttt{0x4001}, \texttt{0x4002}, and \texttt{0x4003}, regardless of the endianness of the system.
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
     \vspace{1cm}
     \hspace{5cm}
     \textbf{ASM system calls}
 \end{frame}
-
 
 \begin{frame}[fragile]{Making System Calls in Assembly}
     On x86\_64, a system call is made like this:
