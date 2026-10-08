@@ -1,0 +1,142 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{\textpf{mov}ing to and from Memory}
+    \begin{itemize}
+        \pause \item The \textpf{mov} instruction can read data from memory to registers, and from registers to memory.
+        \pause \item To read 1 byte from memory at the address contained in \textpf{rsp} into the \textpf{al} register, you would use \textpf{mov al, byte ptr [rsp]}.
+        \pause \item To read 2 bytes from memory at the address contained in \textpf{rsp} into the \textpf{ax} register, you would use \textpf{mov ax, word ptr [rsp]}.
+        \pause \item To read 4 bytes from memory at the address contained in \textpf{rsp} into the \textpf{eax} register, you would use \textpf{mov eax, dword ptr [rsp]}.
+        \pause \item To read 8 bytes from memory at the address contained in \textpf{rsp} into the \textpf{rax} register, you would use \textpf{mov rax, qword ptr [rsp]}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Motivating Example}
+    What does this return?
+    \begin{minted}{c}
+#include <stdint.h>
+
+uint16_t f(void) {
+    uint8_t i[] = {0xFF, 0x00};
+    return *(uint16_t *)i
+}
+    \end{minted}
+
+    \pause A: Either \texttt{0xFF00} or \texttt{0x00FF}, depending on the endianness of your CPU.
+\end{frame}
+
+\begin{frame}{Endianness}
+    CPUs can be \textbf{little-endian} or \textbf{big-endian} (aka LSB/le/el, MSB/be/eb). \\
+
+    When a little-endian CPU executes a \textbf{multi-byte} read, it reverses the order of the bytes before processing them. \\
+
+    When a little-endian CPU executes a \textbf{multi-byte} write, it writes the bytes from least-significant to most-significant.
+\end{frame}
+
+\begin{frame}{Examples of Little-Endian Reads}
+    Suppose that a computer's memory had the following contents at address \texttt{p}:
+    \begin{center}
+        \begin{tabular}{c|c|c|c|c|c}
+            \hline
+            ... & \texttt{0xDE} & \texttt{0xAD} & 0\texttt{xBE} & \texttt{0xEF} & ... \\
+            \hline
+        \end{tabular}
+
+            $\overset{\uparrow}{\texttt{p}}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~$ \\ % This is a hack :)
+
+    \end{center}
+
+    When I read 2 bytes from \texttt{p} on a big-endian machine, I get... \pause \texttt{0xDEAD}.
+
+    When I read 2 bytes from \texttt{p} on a little-endian machine, I get... \pause \texttt{0xADDE}.
+
+    When I read 4 bytes from \texttt{p} on a big-endian machine, I get... \pause \texttt{0xDEADBEEF}.
+
+    When I read 4 bytes from \texttt{p} on a little-endian machine, I get... \pause \texttt{0xEFBEADDE}.
+\end{frame}
+
+\begin{frame}{Endianness Misconception 1}
+    Endianness is about bytes, \textbf{not bits}.
+
+    A little-endian system reverses the order of bytes during memory accesses.
+
+    \begin{center}\textbf{It does not change the order of the bits within each byte.}\end{center}
+
+    As a consequence, if you always read and write things 1 byte at a time, you will not observe any differences between big- and little-endian systems.
+\end{frame}
+
+\begin{frame}[fragile]{Endianness Misconception 2}
+    Endianness does not affect the direction of memory accesses.
+
+    That is, if we execute a 4 byte read at the address \texttt{0x4000}, then we're reading from addresses \texttt{0x4000}, \texttt{0x4001}, \texttt{0x4002}, and \texttt{0x4003}, regardless of the endianness of the system.
+\end{frame}
+
+\begin{frame}[fragile]{Making System Calls in Assembly}
+    On x86\_64, a system call is made like this:
+    \begin{enumerate}
+        \pause \item Place the system call number in \textpf{rax}.
+        \pause \item Place the arguments in \textpf{rdi}, \textpf{rsi}, \textpf{rdx}, \textpf{r10}, \textpf{r8}, \textpf{r9}, in order.
+        \pause \item Execute a \textpf{syscall} instruction.
+        \pause \item (The OS executes the syscall)
+        \pause \item The syscall returns, with the result left in \textpf{rax}. Additionally, \textpf{rcx} and \textpf{r11} are overwritten with junk values.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Activity: Your First Assembly System Call}
+    Write an assembly program to exit with status 25, without returning from \textpf{main}.
+\end{frame}
+
+\begin{frame}[fragile]{Bypassing \textpf{main}: \textpf{\_start}}
+    \begin{itemize}
+        \pause \item We have previously mentioned that initialization code calls \textpf{main} for you, then makes an \textpf{exit} syscall with \textpf{main}'s returned value.
+        \pause \item If you want to do that part yourself, define \textpf{\_start} instead of \textpf{main}.
+        \pause \item \textpf{\_start} is the true entry point of the program.
+        \pause \item When you do this, you need to tell the compiler driver not to provide its own \textpf{\_start}, so that yours will be used instead:
+    \end{itemize}
+    \pause \begin{center} \textpf{gcc -static -nostdlib your\_file.s} \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{argc} and \textpf{argv} in \textpf{\_start}}
+    At the beginning of \textpf{\_start},
+    \begin{itemize}
+        \pause \item \textpf{argc} is written in memory as an 8-byte value at address \textpf{rsp}.
+        \pause \item \textpf{argv} begins at address \textpf{rsp + 8}, and ends at \textpf{rsp + 8 * argc}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Activity: Implement \textpf{echo} in Assembly, using \textpf{\_start} instead of \textpf{main}}
+    \begin{itemize}
+        \item \textpf{echo} is a Unix utility that writes each of its command-line arguments to \textpf{stdout}, separated by spaces, then exits 0.
+        \item Implement \textpf{echo} in assembly.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Activity: Implement \textpf{cat} in Assembly.}
+    Much of this code will be reusable in the homework assignment that I will release today :)
+\end{frame}
+
+\end{document}
