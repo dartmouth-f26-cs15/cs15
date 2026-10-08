@@ -25,6 +25,65 @@
 
 \begin{document}
 
+\begin{frame}{Learning objectives}
+
+Today's learning objectives:
+    \begin{itemize}
+        \item Debugging with GDB
+        \item Endianness
+        \item How to make system calls in assembly
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}
+    \vspace{1cm}
+    \hspace{5cm}
+    \textbf{GDB}
+\end{frame}
+
+
+\begin{frame}{Debugging with GDB}
+    \textit{``Debugging is twice as hard as writing a program in the first place. So if you're as clever as you can be when you write it, you are by definition not smart enough to debug it'' -- Brian Kernighan (Bell Labs, involved in the development of UNIX).}
+
+\end{frame}
+
+\begin{frame}{GDB}
+    \textbf{Debugging capabilities}
+    \begin{itemize}
+        \item Pause program execution
+        \item Inspect variable values
+        \item Step through code line by line
+        \item Analyze memory and stack traces
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \textbf{Usage}
+    \begin{itemize}
+        \item \texttt{gdb ./program}
+        \item Attach to a running program: \texttt{gdb -p [PID]}
+        \item Debug with Core Dump: \texttt{gdb ./program corefile}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Some useful commands}
+    (More in CS 15 handout) \\ 
+r: run \\ 
+c: continue \\ 
+b: breakpoint \\ 
+n: next (execute next line) \\ 
+s: step (step into function call) \\ 
+print i: prints variable i \\ 
+set var i=0 ; sets i to 0
+\end{frame}
+
+\begin{frame}
+    \vspace{1cm}
+    \hspace{5cm}
+    \textbf{Endianness}
+\end{frame}
+
 \begin{frame}[fragile]{\textpf{mov}ing to and from Memory}
     \begin{itemize}
         \pause \item The \textpf{mov} instruction can read data from memory to registers, and from registers to memory.
@@ -94,6 +153,13 @@ uint16_t f(void) {
 
     That is, if we execute a 4 byte read at the address \texttt{0x4000}, then we're reading from addresses \texttt{0x4000}, \texttt{0x4001}, \texttt{0x4002}, and \texttt{0x4003}, regardless of the endianness of the system.
 \end{frame}
+
+\begin{frame}
+    \vspace{1cm}
+    \hspace{5cm}
+    \textbf{ASM system calls}
+\end{frame}
+
 
 \begin{frame}[fragile]{Making System Calls in Assembly}
     On x86\_64, a system call is made like this:
