@@ -52,9 +52,9 @@ Today's learning objectives:
     \textbf{Debugging capabilities}
     \begin{itemize}
         \item Pause program execution
-        \item Inspect variable values
-        \item Step through code line by line
-        \item Analyze memory and stack traces
+        \item Inspect register/memory values
+        \item Step through code instruction by instruction
+        \item Edit register/memory values
     \end{itemize}
 
     \pause Here's a handout.
@@ -108,12 +108,10 @@ s: stepi (step to next instruction) \\
     What does this return?
     \begin{minted}{asm}
 .data
-
 some_cool_bytes:
     .byte 0xff, 0x00
 
 .text
-
 .global main
 main:
     mov rax, 0
