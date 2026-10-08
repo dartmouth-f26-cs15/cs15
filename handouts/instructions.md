@@ -136,3 +136,5 @@ je some_label
 ### Miscellaneous
 - `nop`
     - Short for "no operation." Does nothing.
+- `syscall`
+    - Executes a system call. On x86\_64 Linux, the system call number is expected in `eax`, and arguments are placed in the following registers: `rdi`, `rsi`, `rdx`, `r10`, `r8`, `r9`.
