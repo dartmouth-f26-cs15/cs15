@@ -99,7 +99,6 @@
 \begin{frame}[fragile]{Where do we \textit{fetch}?}
     From what memory address does the CPU find the next instruction?
     \begin{itemize}
-        \pause \item It depends!
         \pause \item On x86\_64, the special-purpose \textpf{rip} register stores the address of the next instruction to execute.
         \pause \item This register is typically called the ``instruction pointer" or ``program counter."
     \end{itemize}
@@ -108,7 +107,6 @@
 \begin{frame}[fragile]{What do we \textit{fetch}?}
     To fetch an instruction, how many bytes need to be read from \textpf{*rip}?
     \begin{itemize}
-        \pause \item It depends!
         \pause \item On x86\_64, instructions are between 1 and 15 bytes long.
         \pause \item x86 CPUs have complicated internal logic to determine how much to read during an instruction fetch.
         \pause \item On ``RISC" CPUs (Reduced Instruction Set Computers, like ARM), instructions tend to be identically-sized.
