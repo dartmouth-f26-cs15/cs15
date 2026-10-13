@@ -90,7 +90,7 @@ Alternatively, you can delete all the breakpoints with a plain
 ## Resuming Program Execution
 
 To resume program execution after stopping at a breakpoint, use the `continue` (or `c`) command.
-If you keep hitting the same breakpoint, and want to skip it 10 times in a row, run
+If you keep hitting the same breakpoint, and want to ignore the next 9 crossings of that breakpoint, run
 ```
 (gdb) continue 10
 ```
