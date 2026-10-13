@@ -6,6 +6,24 @@ geometry: margin=0.5in
 
 GDB, the GNU Debugger, is a program that makes it easy to inspect the execution of other programs. We will be using it extensively in this class.
 
+## Configuring GDB
+
+GDB's default settings are a little rough around the edges.
+You can configure GDB to be nicer by placing GDB commands in a file named `.gdbinit` (notice the leading `.`) in your home directory.
+The commands in this file will be executed every time you start GDB.
+Here's a simple configuration that you might find helpful:
+```
+set verbose off
+set print pretty on
+set print array off
+set print array-indexes on
+set python print-stack full
+set debuginfod enabled on
+set print asm-demangle on
+set disassembly-flavor intel
+set print elements 0
+```
+
 ## Opening GDB
 
 To invoke GDB on an executable named `a.out`, run (in the shell)
