@@ -5,7 +5,8 @@ geometry: margin=1in
 # Assignment 03: `xdump`, due Wednesday, October 14 at 11:59:59 PM
 
 In this assignment, your task is to write a Linux x86_64 assembly program named `xdump` (with `_start` as the entry point) that does the following:
-1. If an argument is p[assed on `argv`, treat it as a file name and `open` it. If `open` fails, `exit` with status 1.
+
+1. If an argument is passed on `argv`, treat it as a file name and `open` it. If `open` fails, `exit` with status 1.
 2. Read this file one byte at a time, and write to stdout the contents of the file, in hex, separated by spaces.
 3. Every 16 bytes, write a newline character.
 4. If no argument is passed, do the same thing, but read from stdin.
