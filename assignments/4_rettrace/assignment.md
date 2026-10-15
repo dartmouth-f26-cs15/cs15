@@ -112,5 +112,5 @@ The style grade is determined by 2 factors:
 
 During the X-hour, you will sit down with a member of the course staff for a 5-10 minute interview.
 It should be very easy to receive a 100% interview grade if you wrote your program without external help.
-If there parts of your program that you cannot adequately explain, you'll get no more than a 50% for this part of the grade.
+If there are parts of your program that you cannot adequately explain, you'll get no more than a 50% for this part of the grade.
 If there are significant parts of your program that you cannot adequately explain, you'll receive a 0% for this part of the grade, and may face consequences for violating the academic honor principle.
