@@ -1,0 +1,124 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{Making Your Assembly Compatible with C}
+    \begin{itemize}
+        \pause \item When you're writing assembly on your own, you can use every register however you like.
+        % e.g., if you want to place your return value in rbx, this is fine.
+        \pause \item When your assembly needs to be called by other people's C, then you need to conform to the ``calling convention."
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Argument Passing}
+    On x86\_64 Linux, function arguments are passed in the following registers:
+    \begin{enumerate}
+        \pause \item \textpf{rdi}
+        \pause \item \textpf{rsi}
+        \pause \item \textpf{rdx}
+        \pause \item \textpf{rcx}
+        \pause \item \textpf{r8}
+        \pause \item \textpf{r9}
+    \end{enumerate}
+
+    \pause \textbf{Note that this is distinct from syscall argument passing!!}
+\end{frame}
+
+\begin{frame}[fragile]{Return Values}
+    On x86\_64 Linux, function return values are passed as follows:
+    \begin{itemize}
+        \pause \item If the value fits in 64 bits, it goes in \textpf{rax}.
+        \pause \item Otherwise, if the value fits in 128 bits, it goes in \textpf{rdx:rax}.
+        \pause \item Otherwise, don't worry about it :)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Nonvolatile Registers}
+    Some registers are assumed to not change across a function call. These are
+    \begin{itemize}
+        \pause \item \textpf{rbx},
+        \pause \item \textpf{rbp},
+        \pause \item \textpf{rsp},
+        \pause \item \textpf{r12},
+        \pause \item \textpf{r13},
+        \pause \item \textpf{r14}, and
+        \pause \item \textpf{r15}.
+    \end{itemize}
+    \begin{itemize}
+        \pause \item If you want to use any of these registers in your functions, make sure to preserve them!
+        \pause \item These registers are also called ``callee-preserved," because it is the responsibility of the callee (the function being called) to preserve them.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Volatile Registers}
+    \begin{itemize}
+        \pause \item All other registers are allowed to change during a function call.
+        \pause \item That means when you call a function, all of those registers could be changed arbitrarily by the function.
+        \pause \item That means if you want to call a function, but you're using a volatile register for something, you need to preserve its value before calling the function.
+        \pause \item These registers are also called ``caller-preserved," because it is the responsibility of the caller (the code that is making the \textpf{call}) to preserve them.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Calling Assembly from C}
+    To make an assembly function callable from C, do the following:
+    \begin{itemize}
+        \pause \item Ensure that your function conforms to the calling convention. That is, make sure that your function
+            \begin{enumerate}
+                \pause \item doesn't mess with stuff in the calling function's stack frame,
+                \pause \item preserves the nonvolatile registers,
+                \pause \item accepts arguments and returns in the expected registers.
+            \end{enumerate}
+        \pause \item Mark it as \textpf{.global}.
+        \pause \item Declare it in a \textpf{.h} file.
+    \end{itemize}
+    \pause If you've done this, you can call your assembly function just like a normal C function!
+\end{frame}
+
+\begin{frame}[fragile]{Example: \textpf{add\_2.s}}
+    \inputminted{asm}{./add_2.s}
+\end{frame}
+
+\begin{frame}[fragile]{Example: \textpf{add\_2.h}}
+    \inputminted{c}{./add_2.h}
+\end{frame}
+
+\begin{frame}[fragile]{Example: \textpf{main.c}}
+    \inputminted{c}{./main.c}
+\end{frame}
+
+\begin{frame}[fragile]{Activities!}
+    Implement the following functions in assembly. Ensure that your code is callable from C.
+    \begin{itemize}
+        \pause \item \textpf{uint16\_t swapster(uint16\_t)}, which swaps the byte order of its argument.
+            \begin{itemize}
+                \pause \item e.g., \textpf{swapster(0xabcd)} returns \textpf{0xcdab}.
+            \end{itemize}
+        \pause \item \textpf{strcpy}, (feel free to call the \textpf{strlen} from libc)
+        \pause \item \textpf{strcat}, (feel free to call the \textpf{strlen} from libc).
+    \end{itemize}
+\end{frame}
+
+\end{document}
