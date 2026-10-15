@@ -2,20 +2,28 @@
 geometry: margin=1in
 ---
 
-# Assignment 04: `backtrace`, Due Friday, May 9
+# Assignment 04: `rettrace`, Due Wednesday, October 21
 
-Your task in this assignment is to write an ABI-compliant function `backtrace` in x86-64 assembly that prints a backtrace to stdout.
+Your task in this assignment is to write a function `rettrace` in x86-64 assembly that prints a rettrace to stdout.
 That is, your function should print all of the saved return addresses on the stack, separated by newlines, in hex, prefixed with "`0x`", and padded with `0`s to 16 characters in length (18, if you count the "`0x`").
+
+Your function should be callable from C, which means it must follow the rules specified in the "Calling Assembly from C" slide from Thursday's class.
 
 You are not permitted to call any external functions in your assembly program, but you can make any syscalls that you want.
 
+You should assume that register `rbp` is used as described during class (i.e., as a base pointer).
+
+Hints:
+- This assignment requires deep understanding of the stack (including key stack-related instructions like `push`, `pop`, `call`, `ret`).
+- The core loop of your submission shouldn't be very much code.
+
 ## What to Submit
 
-- `backtrace.s`
-    - Contains your implementation of `backtrace`.
-    - `backtrace` should be the only function declared `.global` in `backtrace.s`.
-- `backtrace.h`
-    - Contains a declaration of `backtrace` so that it is callable from C.
+- `rettrace.s`
+    - Contains your implementation of `rettrace`.
+    - `rettrace` should be the only function declared `.global` in `rettrace.s`.
+- `rettrace.h`
+    - Contains a declaration of `rettrace` so that it is callable from C.
 
 \newpage
 
@@ -23,10 +31,10 @@ You are not permitted to call any external functions in your assembly program, b
 
 Suppose that we have the following C program in a file named `test.c`:
 ```c
-#include "backtrace.h"
+#include "rettrace.h"
 
 void f(void) {
-    backtrace();
+    rettrace();
 }
 
 int main(void) {
@@ -36,7 +44,7 @@ int main(void) {
 
 When you're done with the assignment, you should be able to compile this program as follows:
 ```
-gcc test.c backtrace.s
+gcc test.c rettrace.s
 ```
 
 When you run `./a.out`, you should see a sequence of addresses:
@@ -74,7 +82,7 @@ In other words, by e**X**amining **1** **I**nstruction from each of these addres
 - `__libc_start_main_impl`,
 - `_start`.
 
-That's the right backtrace! `_start` called `__libc_start_main_impl`, which called `__libc_start_call_main`, which called `main`, which called `f` (which called `backtrace`).
+That's the right rettrace! `_start` called `__libc_start_main_impl`, which called `__libc_start_call_main`, which called `main`, which called `f` (which called `rettrace`).
 
 # Use of External Resources
 
