@@ -14,6 +14,7 @@ You are not permitted to call any external functions in your assembly program, b
 You should assume that register `rbp` is used as described during class (i.e., as a base pointer).
 
 Hints:
+
 - This assignment requires deep understanding of the stack (including key stack-related instructions like `push`, `pop`, `call`, `ret`).
 - The core loop of your submission shouldn't be very much code.
 
