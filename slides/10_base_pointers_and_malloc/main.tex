@@ -1,0 +1,105 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{An Example}
+    \begin{itemize}
+        \pause \item Let's look at 2 files: \textpf{frames.c} and \textpf{frames.s}.
+        \pause \item Let's single-step this program by hand :)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Stack Frames}
+    \begin{itemize}
+        \pause \item A function call's stack frame is the region of the stack that ``belongs to" that function call.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Function Prologue}
+    \begin{itemize}
+        \pause \item Most functions that the compiler emits will begin with \textpf{push rbp}, \textpf{mov rbp, rsp}.
+        \pause \item Q: What does this do?
+        \pause \item A: This saves \textpf{rbp} onto the stack, then moves the current value of the stack pointer into \textpf{rbp}.
+        \pause \item When \textpf{rbp} is used this way, it's acting as the ``base pointer," the pointer to the base of the stack frame.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Stack Unwinding}
+    \begin{itemize}
+        \pause \item Q: Assuming that we are using \textpf{rbp} as a base pointer, what is stored at the base of each stack frame?
+        \pause \item A: The saved base pointer from the previous stack frame!
+        \pause \item Q: What's just above that on the stack?
+        \pause \item A: The previous frame's return address!
+        \pause \item When you use this to crawl through the stack and find all the previous return addresses, that's \textbf{stack unwinding}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Back to C!}
+    :)
+\end{frame}
+
+\begin{frame}[fragile]{When Locals are Insufficient}
+    \begin{itemize}
+        \pause \item Recall this function signature UTF-8 assignment:
+        \item {\tiny \textpf{uint64\_t parse\_utf8(uint8\_t *input, uint64\_t input\_len, uint32\_t *output);}}
+        \pause \item Why did we need \textpf{output} to be passed into the function?
+        \pause \item Why couldn't the function just return a pointer to a local array?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{malloc}}
+    \begin{itemize}
+        \pause \item Let's read the \textpf{malloc} manual page.
+        \pause \item Use \textpf{malloc} in these 3 scenarios:
+            \begin{itemize}
+                \pause \item When you need access to some memory, but you don't know how much at compile time.
+                \pause \item When you need more memory than there is space on the stack (typically a few megabytes).
+                \pause \item When you need to write a function that creates an object and returns its address.
+                    \begin{itemize}
+                        \pause \item This can often be avoided. How?
+                    \end{itemize}
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{free}}
+    \begin{itemize}
+        \pause \item Because \textpf{malloc}ed objects aren't scoped, you need to tell libc when you're done using them.
+        \pause \item To do this, you use \textpf{free}.
+        \pause \item Let's read the \textpf{free} manual page.
+        \pause \item When you don't free memory that you \textpf{malloc}ed, that's a \textbf{memory leak}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Exercises}
+    \begin{itemize}
+        \pause \item Write \textpf{allocating\_strcat}, which is just like \textpf{strcat}, but doesn't modify its arguments.
+        \pause \item Write a function that takes a \textpf{uint32\_t}, converts it to a string (in base 10), and returns the result.
+        \pause \item Use \textpf{malloc} to modify your UTF-8 code to no longer need the \textpf{output} argument, and return a struct containing both the output and its size.
+    \end{itemize}
+\end{frame}
+
+\end{document}
