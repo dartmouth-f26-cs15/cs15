@@ -14,7 +14,6 @@ size_t f(char const * const s, size_t const size) {
     return result;
 }
 
-
 int main(void) {
     static char const s[] = "hunter2hunter2";
     size_t result = f(s, sizeof(s));
