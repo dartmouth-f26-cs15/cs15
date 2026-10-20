@@ -28,6 +28,8 @@
 \begin{frame}[fragile]{Stack Frames}
     \begin{itemize}
         \pause \item A function call's stack frame is the region of the stack that ``belongs to" that function call.
+        \pause \item i.e., any \emph{instance} of execution of that function resulting from a \emph{call} instruction will have its own stack space.
+        \pause \item Nothing magically hapens, the allocation and freeing of the stack are all here! Let's have a look at them.
     \end{itemize}
 \end{frame}
 
