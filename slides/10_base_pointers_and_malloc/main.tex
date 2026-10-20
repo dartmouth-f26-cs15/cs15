@@ -42,7 +42,7 @@
     \begin{itemize}
         \pause \item Most functions that the compiler emits will begin with \textpf{push rbp}, \textpf{mov rbp, rsp}.
         \pause \item Q: What does this do?
-        \pause \item A: This saves \textpf{rbp} onto the stack, then moves the current value of the stack pointer into \textpf{rbp}.
+        \pause \item A: This saves \textpf{rbp} onto the stack, then copies the current value of the stack pointer into \textpf{rbp}.
         \pause \item When \textpf{rbp} is used this way, it's acting as the ``base pointer," the pointer to the base of the stack frame.
     \end{itemize}
 \end{frame}
