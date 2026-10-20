@@ -27,9 +27,16 @@
 
 \begin{frame}[fragile]{Stack Frames}
     \begin{itemize}
-        \pause \item A function call's stack frame is the region of the stack that ``belongs to" that function call.
-        \pause \item i.e., any \emph{instance} of execution of that function resulting from a \emph{call} instruction will have its own stack space.
-        \pause \item Nothing magically hapens, the allocation and freeing of the stack are all here! Let's have a look at them.
+            \pause \item A running function's stack frame is the region of the stack that ``belongs to" that function's execution.
+            \pause \item Nothing magically hapens, the allocation and freeing of the stack are all here!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Base pointer}
+    \begin{itemize}
+        \item The base pointer register on $X86\_64$ is $rbp$.
+        \pause\item It \textit{typically} contains the base of the stack frame of the current function.
+        \pause\item NB: the \texttt{-fomit-frame-pointer} compiler flag will disable this behavior and treat $rbp$ as a general purpose register (this is sometimes enabled for performance reasons).
     \end{itemize}
 \end{frame}
 
