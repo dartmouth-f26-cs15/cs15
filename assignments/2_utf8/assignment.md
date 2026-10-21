@@ -26,6 +26,8 @@ You may find the table in the "Description" section of [this Wikipedia page](htt
 
 Your decoder should `exit(EXIT_FAILURE)` whenever the input bytes cannot be decoded, or when decoding them would require accessing `input` out of bounds.
 
+You do not need to catch overlong encoding.
+
 ## What to Submit
 
 - `utf8.c`
