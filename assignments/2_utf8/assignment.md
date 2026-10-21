@@ -9,7 +9,7 @@ Your task in this assignment is to build a simple UTF-8 code point decoder.
 During this task, you are permitted to use anything you want from libc, though I don't anticipate that you'll need to use very much of libc for this assignment.
 No other libraries are permitted.
 
-Your parser should be exposed through a single function:
+Your library should globally define **only** the following functions (all other function definitions must be `static`):
 ```C
 size_t parse_utf8(uint8_t const *input, size_t input_len, uint32_t *output);
 ```
@@ -26,7 +26,14 @@ You may find the table in the "Description" section of [this Wikipedia page](htt
 
 Your decoder should `exit(EXIT_FAILURE)` whenever the input bytes cannot be decoded, or when decoding them would require accessing `input` out of bounds.
 
-You do not need to catch overlong encoding.
+That is, you should exit with a failure status when any of the following occur:
+
+- Code points are encoded in more bytes than necessary.
+- Multibyte characters are truncated.
+- Continuation bytes appear in the start byte position.
+- A byte beginning with 5 1s appears anywhere in the input.
+- A non-continuation byte appears where a continuation byte is expected.
+- A decoded code point is greater than the maximum code point.
 
 ## What to Submit
 
