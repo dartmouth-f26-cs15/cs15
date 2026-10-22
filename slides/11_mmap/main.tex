@@ -1,0 +1,160 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}{Learning objectives}
+    \begin{itemize}
+        \item Intro to address space of processes
+        \item Memory mappings!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Virtual Addressing}
+    \begin{itemize}
+        \item Demo!
+        \pause \item Every process has its own address space.
+        \pause \item This means that address $n$ in process $P_1$ does not refer to the same physical memory as address $n$ in process $P_2$.
+        \pause \item The MMU (a component of the CPU) maps \textbf{virtual} addresses in a process's address space to \textbf{physical} addresses in the RAM.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Memory Mappings}
+    \begin{itemize}
+        \pause \item Not every virtual address is actually backed by physical memory!
+        \pause \item When you try to access memory at a virtual address that doesn't have any physical memory behind it, you get a \textpf{SIGSEGV}.
+        \pause \item Virtual memory is mapped to physical memory in chunks (pages). On most systems, a page is 4096 (\textpf{0x1000}) bytes.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Memory Permissions}
+    \begin{itemize}
+        \pause \item Memory has 3 permissions:
+        \begin{itemize}
+            \pause \item \textpf{R}: Whether this memory can be read from.
+            \pause \item \textpf{W}: Whether this memory can be written to.
+            \pause \item \textpf{X}: Whether this memory can be executed from.
+        \end{itemize}
+    \pause \item When you access memory in a way that violates its permissions, (e.g., when you attempt to write into read-only memory) you might get a \textpf{SIGSEGV}.
+    \pause \item Q: Why do we do this?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Viewing Memory Mappings in GDB}
+    \begin{itemize}
+        \pause \item When you're debugging a program in GDB, you can view its memory mappings with \textpf{info proc mappings}.
+        \pause \item Demo!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Viewing Memory Mappings Outside of GDB}
+    \begin{itemize}
+        \pause \item If you want to view the mappings of a program that's not running in GDB, do the following:
+            \begin{enumerate}
+                \pause \item Get its PID using \textpf{pidof}, \textpf{pgrep}, or \textpf{ps}.
+                \pause \item \textpf{cat /proc/XXXXXX/maps}, where \textpf{XXXXXX} is the PID you just found.
+            \end{enumerate}
+        \pause \item Demo!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Activity: Draw an Address Space}
+    \begin{itemize}
+        \pause \item Take one of your \textpf{malloc} activity programs from last class, and draw its address space.
+        \pause \item How does its address space change during the course of execution?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Getting More Memory}
+    Last class, we saw how \textpf{malloc} can be used to acquire more memory.
+    Under the hood, \textpf{malloc} is usually implemented with the following system calls:
+    \begin{itemize}
+        \pause \item \textpf{mmap}: Generic syscall for acquiring new memory mappings.
+        \pause \item \textpf{brk}: Historical syscall for acquiring memory, not as flexible.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Understanding \textpf{man 2 mmap}}
+    The \textpf{mmap} arguments:
+    \begin{itemize}
+        \pause \item \textpf{void *addr}: The desired virtual address for the new mapping, or \textpf{NULL} if you don't care. Must be a multiple of the page size.
+        \pause \item \textpf{size\_t len}: The desired number of bytes to map. Will be rounded up to a multiple of the page size.
+        \pause \item \textpf{int prot}: The desired permissions for the newly-mapped memory. Almost always a bitwise-OR of the following constants:
+            \begin{itemize}
+                \pause \item \textpf{PROT\_READ}
+                \pause \item \textpf{PROT\_WRITE}
+                \pause \item \textpf{PROT\_EXEC}
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Understanding \textpf{man 2 mmap}, continued}
+    The \textpf{mmap} arguments, continued:
+    \begin{itemize}
+        \pause \item \textpf{int flags}: Provides more information about the requested memory. In this class, will probably be a bitwise-OR of the following constants:
+            \begin{itemize}
+                \pause \item \textpf{MAP\_PRIVATE}: States that this mapping is not shared between multiple processes.
+                \pause \item \textpf{MAP\_ANONYMOUS}: States that this mapping is not backed by a file.
+                \pause \item \textpf{MAP\_FIXED\_NOREPLACE}: States that this mapping should be placed at exactly the virtual address specified by \textpf{addr}, unless something is already mapped there, in which case the \textpf{mmap} should fail.
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Understanding \textpf{man 2 mmap}, continued}
+    The \textpf{mmap} arguments, continued:
+    \begin{itemize}
+        \pause \item \textpf{int fd}: Always pass \textpf{-1} for this argument.
+        \pause \item \textpf{int offset}: Always pass \textpf{0} for this argument.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Understanding \textpf{man 2 mmap}, continued}
+    \textpf{mmap} returns either
+    \begin{itemize}
+        \pause \item the virtual address of the new mapping on success, or
+        \pause \item a special constant \textpf{MAP\_FAILED} on failure.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{munmap}}
+    \begin{itemize}
+        \pause \item When you're done with some \textpf{mmap}ed memory, \textpf{munmap} it!
+        \pause \item Otherwise, you have a memory leak.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{An Example}
+    \inputminted[fontsize=\tiny]{c}{mmap_example.c}
+\end{frame}
+
+\begin{frame}[fragile]{Activities}
+    \begin{itemize}
+        \pause \item Use \textpf{mmap} to map some read-only memory. Try writing into it. What happens?
+        \pause \item Use \textpf{mmap} to map some write-only memory. Try reading from it. What happens?
+        \pause \item Use \textpf{mmap} to map some readable and writable memory. Try executing from it (this may require assembly). What happens?
+    \end{itemize}
+\end{frame}
+
+\end{document}
