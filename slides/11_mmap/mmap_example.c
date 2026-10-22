@@ -4,8 +4,8 @@
 #include <stdio.h> // for printf, puts, getchar
 #include <string.h> // for memcpy
 
-void f(void) {
-    puts("I got called!");
+int f(void) {
+    return 5;
 }
 
 int main(void) {
@@ -22,6 +22,8 @@ int main(void) {
         return EXIT_FAILURE;
     }
     memcpy(new_mapping, f, getpagesize());
-    ((void (*)(void))new_mapping)();
+    int f_result = ((int (*)(void))new_mapping)();
     munmap(new_mapping, getpagesize());
+
+    return f_result;
 }
