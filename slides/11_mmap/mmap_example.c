@@ -21,10 +21,7 @@ int main(void) {
     if (new_mapping == MAP_FAILED) {
         return EXIT_FAILURE;
     }
-
     memcpy(new_mapping, f, getpagesize());
-
     ((void (*)(void))new_mapping)();
-
     munmap(new_mapping, getpagesize());
 }
