@@ -437,7 +437,7 @@ The other files in this directory (`malloc.c` and `Makefile`) will be used in Tu
 
 ## What to Submit
 
-- `malloc.c`
+- `cs15_malloc.c`
     - Contains your implementations of `cs15_malloc`, `cs15_realloc`, and `cs15_free`.
 
 # Use of External Resources
