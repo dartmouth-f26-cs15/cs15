@@ -1,0 +1,88 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{emoji}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{Static Linking vs. Dynamic Linking}
+    Programs can be linked in 2 different ways:
+    \begin{itemize}
+        \pause \item Statically:
+            \begin{itemize}
+                \pause \item Calls to library functions are filled in when you run the compiler driver.
+            \end{itemize}
+        \pause \item Dynamically:
+            \begin{itemize}
+                \pause \item Calls to library functions are stubbed out when you run the compiler driver.
+                \pause \item When you run the program, the dynamic linker (\textpf{/usr/lib/ld-linux-x86-64.so.2}) runs first, and maps in the needed libraries.
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Static Linking vs. Dynamic Linking}
+    Let's compare static and dynamic linking on the following criteria:
+    \begin{itemize}
+        \pause \item Disk usage. \pause \textbf{Dynamic wins!}
+        \pause \item Memory usage. \pause \textbf{Static wins!}
+        \pause \item Patchability. \pause \textbf{Dynamic wins!} % Maybe think of a better word for this
+        \pause \item Portability. \pause \textbf{Static wins!}
+        \pause \item Program startup time. \pause \textbf{Static wins!}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{LD\_PRELOAD}}
+    \begin{itemize}
+        \pause \item When the dynamic linker runs, you can request for it to override library functions with \textit{your own stuff} through the \textpf{LD\_PRELOAD} environment variable.
+        \pause \item When this variable's value is a path to a shared library file, it loads that library first.
+        \pause \item If there are name conflicts between \textpf{LD\_PRELOAD}ed libraries and system libraries, the \textpf{LD\_PRELOAD}ed libraries have priority!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{1337\_puts.c}}
+    \inputminted[fontsize=\tiny]{c}{1337_puts.c}
+\end{frame}
+
+\begin{frame}[fragile]{Building \textpf{1337\_puts.c}}
+    \begin{minted}{bash}
+gcc -shared 1337_puts.c -o 1337_puts.so
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{LD\_PRELOAD}ing \textpf{1337\_puts.so}}
+    Let's run \textpf{git --help}, overriding \textpf{puts} with the \textpf{1337} version :)
+    \begin{minted}{bash}
+LD_PRELOAD=./1337_puts.so git --help
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Activity (10 minutes)}
+    Write a funny version of a libc function, then \textpf{LD\_PRELOAD} it into something cool :)
+\end{frame}
+
+\begin{frame}[fragile]{Assignment 5: \textpf{malloc}}
+    Let's discuss the assignment.
+\end{frame}
+
+\end{document}
