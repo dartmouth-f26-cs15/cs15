@@ -1,4 +1,3 @@
-#include <stdio.h> // for EOF
 #include <unistd.h> // for write, STDOUT_FILENO
 #include <string.h> // for strlen
 #include <stdlib.h> // for malloc, free
