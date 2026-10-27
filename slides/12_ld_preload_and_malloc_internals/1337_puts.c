@@ -5,7 +5,7 @@
 
 int puts(char const *s) {
     size_t const s_len = strlen(s);
-    char *s_copy = malloc(s_len + 1);
+    char *const s_copy = malloc(s_len + 1);
     for (size_t i = 0; i < s_len; i++) {
         if (s[i] == 's') {
             s_copy[i] = 'z';
