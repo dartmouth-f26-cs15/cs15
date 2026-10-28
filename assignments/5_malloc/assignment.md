@@ -433,7 +433,7 @@ On Tuesday's class, we'll cover how to test your library replacing the system's 
 You can then, for example, run the Python interpreter on top of your allocator.
 If it doesn't crash, that's a good sign :)
 
-The other files in this directory (`malloc.c` and `Makefile`) will be used in Tuesday's class.
+The other files in this directory (`malloc.c`, `malloc.h`, and `Makefile`) will be discussed in class.
 
 ## What to Submit
 
