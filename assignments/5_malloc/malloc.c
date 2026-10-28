@@ -1,11 +1,11 @@
 #define _DEFAULT_SOURCE
+#include <malloc.h> // for malloc_usable_size, memalign, pvalloc, mallopt, mallinfo, mallinfo2, struct mallinfo, struct mallinfo2, malloc_trim, malloc_stats, malloc_info
 #include <pthread.h> // for PTHREAD_MUTEX_INITIALIZER, pthread_mutex_t, pthread_mutex_lock, pthread_mutex_unlock
 #include <stddef.h>  // for size_t
-#include <stdlib.h>  // for malloc, free, realloc, calloc, reallocarray, aligned_alloc, posix_memalign, valloc, EXIT_FAILURE, free_sized, free_aligned_sized
-#include <string.h>  // for memset
-#include <unistd.h>  // for write, STDERR_FILENO, _exit
-#include <malloc.h>  // for malloc_usable_size, memalign, pvalloc, mallopt, mallinfo, mallinfo2, struct mallinfo, struct mallinfo2, malloc_trim, malloc_stats, malloc_info
 #include <stdio.h>   // for FILE
+#include <stdlib.h> // for malloc, free, realloc, calloc, reallocarray, aligned_alloc, posix_memalign, valloc, EXIT_FAILURE, free_sized, free_aligned_sized
+#include <string.h> // for memset
+#include <unistd.h> // for write, STDERR_FILENO, _exit
 
 #include "cs15_malloc.h"
 
@@ -60,11 +60,13 @@ void free_aligned_sized(void *const p, size_t, size_t) {
     free(p);
 }
 
-#define UNIMPLEMENTED(s) { \
-    static char const msg[] = s " is not implemented. Don't worry about this.\n-CS15 Staff.\n"; \
-    write(STDERR_FILENO, msg, sizeof(msg) - 1); \
-    _exit(EXIT_FAILURE); \
-}
+#define UNIMPLEMENTED(s)                                                       \
+    {                                                                          \
+        static char const msg[] =                                              \
+            s " is not implemented. Don't worry about this.\n-CS15 Staff.\n";  \
+        write(STDERR_FILENO, msg, sizeof(msg) - 1);                            \
+        _exit(EXIT_FAILURE);                                                   \
+    }
 
 void *aligned_alloc(size_t, size_t) {
     UNIMPLEMENTED("aligned_alloc");
