@@ -180,8 +180,8 @@ Then, because the top chunk is the only chunk in the heap, we `munmap` it, leavi
 ## Example Usage 2
 
 ```c
-1:  char *p0 = cs15_malloc(8);
-2:  char *p1 = cs15_malloc(8);
+1:  void *p0 = cs15_malloc(8);
+2:  void *p1 = cs15_malloc(8);
 3:  void *p2 = cs15_malloc(8); 
 4:  void *p3 = cs15_malloc(8); 
 5:  cs15_free(p0);
