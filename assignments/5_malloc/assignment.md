@@ -93,7 +93,7 @@ Then, return the smaller chunk to the user, and keep the larger chunk around in 
 
 ## Algorithms
 
-Sse the following algorithms for your allocator.
+Use the following algorithms for your allocator.
 
 ### `cs15_malloc` Algorithm
 
