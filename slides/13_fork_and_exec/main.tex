@@ -26,18 +26,26 @@
 
 \begin{document}
 
+\begin{frame}{Learning objectives}
+    \begin{itemize}
+        \item How programs are executed
+        \item What is means in terms of system calls and address space
+        \item Some useful tips for the assignment :)
+    \end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Processes}
     \begin{itemize}
         \pause \item What's the difference between a process and a program?
         \pause \item A program is a file on the disk. It's just a sequence of bytes.
-        \pause \item A process is a running program. i.e., a process has an address space, file descriptors, etc.
+        \pause \item A process is a running program. That is, a process has an address space, file descriptors, etc.
     \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{What does a shell do?}
     \begin{itemize}
         \pause \item When you run \textpf{./a.out}, what actually happens?
-        \pause \item What system calls is the shell making to cause \textpf{a.out} to run?
+        \pause \item What system calls is the shell making to cause \textpf{a.out} to execute?
     \end{itemize}
 \end{frame}
 
@@ -71,6 +79,9 @@
 
 \begin{frame}[fragile]{Making more processes}
     \begin{itemize}
+        %\item Q: If we were to implement a shell (hypothetically :) ), how would we use \texttt{execve} in this context? Is there anything else missing?
+        \item Suppose we want to write a C program that runs \texttt{ls} twice. How would you do that?
+
         \pause \item If we \textit{only} had \textpf{execve}, we would have no way of creating new processes; we could only replace existing processes.
         \pause \item If you want to create a new process, you can use
             \begin{itemize}
@@ -92,7 +103,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Back to \textpf{strace}}
+\begin{frame}[fragile]{Returning to \textpf{strace}}
     Demo!
 \end{frame}
 
