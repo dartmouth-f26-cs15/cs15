@@ -60,68 +60,69 @@ void free_aligned_sized(void *const p, size_t, size_t) {
     free(p);
 }
 
-#define UNIMPLEMENTED(s)                                                       \
-    {                                                                          \
-        static char const msg[] =                                              \
-            s " is not implemented. Don't worry about this.\n-CS15 Staff.\n";  \
-        write(STDERR_FILENO, msg, sizeof(msg) - 1);                            \
-        _exit(EXIT_FAILURE);                                                   \
-    }
+[[noreturn]] static void unimplemented(char const *const s) {
+    write(STDERR_FILENO, s, strlen(s));
+    static char const msg[] =
+        " is not implemented. Don't worry about this.\n-CS15 Staff.\n";
+    write(STDERR_FILENO, msg, sizeof(msg) - 1);
+    _exit(EXIT_FAILURE);
+}
 
 void *aligned_alloc(size_t, size_t) {
-    UNIMPLEMENTED("aligned_alloc");
+    unimplemented("aligned_alloc");
     return nullptr;
 }
 
 size_t malloc_usable_size(void *) {
-    UNIMPLEMENTED("malloc_usable_size");
+    unimplemented("malloc_usable_size");
     return 0;
 }
 
 void *memalign(size_t, size_t) {
-    UNIMPLEMENTED("memalign");
+    unimplemented("memalign");
     return 0;
 }
 
 int posix_memalign(void **, size_t, size_t) {
-    UNIMPLEMENTED("posix_memalign");
+    unimplemented("posix_memalign");
     return -1;
 }
 
 void *valloc(size_t) {
-    UNIMPLEMENTED("valloc");
+    unimplemented("valloc");
     return nullptr;
 }
 
 void *pvalloc(size_t) {
-    UNIMPLEMENTED("pvalloc");
+    unimplemented("pvalloc");
     return nullptr;
 }
 
 struct mallinfo mallinfo(void) {
-    UNIMPLEMENTED("mallinfo");
+    unimplemented("mallinfo");
     return (struct mallinfo){};
 }
 
 struct mallinfo2 mallinfo2(void) {
-    UNIMPLEMENTED("mallinfo2");
+    unimplemented("mallinfo2");
     return (struct mallinfo2){};
 }
 
 int mallopt(int, int) {
-    UNIMPLEMENTED("mallopt");
+    unimplemented("mallopt");
     return -1;
 }
 
 int malloc_trim(size_t) {
-    UNIMPLEMENTED("malloc_trim");
+    unimplemented("malloc_trim");
     return -1;
 }
 
 void malloc_stats(void) {
-    UNIMPLEMENTED("malloc_stats");
+    unimplemented("malloc_stats");
 }
 
 int malloc_info(int, FILE *) {
-    UNIMPLEMENTED("malloc_info");
+    unimplemented("malloc_info");
+    return -1;
 }
