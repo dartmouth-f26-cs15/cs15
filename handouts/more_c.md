@@ -230,7 +230,7 @@ Now, the `char`s in the array are `volatile`, so the loop won't be optimized out
 The `register` keyword allows you to inform the compiler that a variable will never have its address taken.
 
 That is, the following code will not compile:
-```
+```c
 int main(void) {
     register int i;
     &i;

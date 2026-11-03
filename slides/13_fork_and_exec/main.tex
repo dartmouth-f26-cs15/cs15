@@ -1,0 +1,107 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{emoji}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{Processes}
+    \begin{itemize}
+        \pause \item What's the difference between a process and a program?
+        \pause \item A program is a file on the disk. It's just a sequence of bytes.
+        \pause \item A process is a running program. That is, a process has an address space, file descriptors, etc.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{What does a shell do?}
+    \begin{itemize}
+        \pause \item When you run \textpf{./a.out}, what actually happens?
+        \pause \item What system calls is the shell making to cause \textpf{a.out} to execute?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{strace}}
+    \begin{itemize}
+        \pause \item \textpf{strace} is a tool that can show you the system call sequence for another process.
+        \pause \item To use \textpf{strace} on \textpf{./a.out}, just run \textpf{strace ./a.out}.
+        \pause \item Demo!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{execve}}
+    \begin{itemize}
+        \pause \item \textpf{execve} is a syscall that asks the kernel to unmap this process's entire address space, then map in and run a new executable.
+        \pause \item \textpf{execve} takes 3 arguments:
+            \begin{itemize}
+                \pause \item \textpf{char *path}: the path to the executable that we want to run.
+                \pause \item \textpf{char *argv}: the \textpf{argv} that we want to pass. (May be \textpf{NULL})
+                \pause \item \textpf{char *envp}: the \textpf{envp} that we want to pass. (May be \textpf{NULL})
+            \end{itemize}
+        \pause \item Demo!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{execve} \textbf{replaces} the current process!}
+    \begin{itemize}
+        \pause \item Once you \textpf{execve}, the current process has been wiped out!
+        \pause \item (A few things remain, like open file descriptors. Don't worry about this for now.)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Making more processes}
+    \begin{itemize}
+        \pause \item If we \textit{only} had \textpf{execve}, we would have no way of creating new processes; we could only replace existing processes.
+        \pause \item If you want to create a new process, you can use
+            \begin{itemize}
+                \pause \item \textpf{fork}, (simple API, inefficient)
+                \pause \item \textpf{vfork}, (simple API, slightly less inefficient)
+                \pause \item \textpf{clone}, (complicated API, much more efficient)
+                \pause \item \textpf{clone3}. (slightly less complicated API, also efficient)
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{fork}}
+    \begin{itemize}
+        \pause \item \textpf{fork} makes a duplicate of the existing process.
+        \pause \item The new process is called a \textit{child process} of the original (\textit{parent}) process.
+        \pause \item For the parent process, \textpf{fork} returns the PID of the child process.
+        \pause \item For the child process, \textpf{fork} returns 0.
+        \pause \item Demo!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Returning to \textpf{strace}}
+    Demo!
+\end{frame}
+
+\begin{frame}[fragile]{Activity}
+    Fork bomb \textpf{plink}!
+\end{frame}
+
+\begin{frame}[fragile]{Field Trip!}
+    We need to reboot \textpf{plink} :)
+\end{frame}
+
+\end{document}
