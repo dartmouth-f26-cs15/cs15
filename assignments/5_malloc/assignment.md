@@ -429,11 +429,14 @@ Everything is unmapped, and the freelist is empty.
 
 Begin by testing your library the usual way; just call into your allocator and verify in GDB that it behaves the way you expect.
 
-On Tuesday's class, we'll cover how to test your library replacing the system's `malloc` with your own.
-You can then, for example, run the Python interpreter on top of your allocator.
-If it doesn't crash, that's a good sign :)
+When you're convinced that your allocator might be correct, try `LD_PRELOAD`ing it into some programs on Plink.
+To do this, place your `cs15_malloc.c` into this directory, and run the following commands:
+1. `make` (builds `malloc.so` by running the compiler driver. See [this tutorial](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/index.htm) for more info on how this works.)
+2. `LD_PRELOAD=./malloc.so python`
 
-The other files in this directory (`malloc.c`, `malloc.h`, and `Makefile`) will be discussed in class.
+If you get a Python REPL that doesn't crash, that's a good sign.
+Otherwise, there's a bug in your allocator.
+Once you have Python working, try `LD_PRELOAD`ing your allocator into other stuff on Plink.
 
 ## What to Submit
 
