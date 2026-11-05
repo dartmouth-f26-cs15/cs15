@@ -1,0 +1,147 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{emoji}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{Tell me what to type!}
+    Let's try a C program that runs \textpf{ls}, then runs \textpf{ls /}.
+    % The goal is for the students to end up with something like `ls_twice.c` (found in this directory).
+\end{frame}
+
+\begin{frame}[fragile]{Let's \textpf{strace} it}
+    \begin{itemize}
+        \pause \item Notice anything different? % The order of execution has changed, due to the overhead of ptrace.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{waitpid}}
+    \begin{itemize}
+        \pause \item The \textpf{waitpid} system call allows processes to wait until events occur in other processes. It takes 3 arguments:
+            \begin{itemize}
+                \pause \item \textpf{pid\_t pid}, the \textpf{pid} of the process to wait on.
+                \pause \item \textpf{int *wstatus}. This one is complicated. Wait for the next slide :)
+                \pause \item \textpf{int options}, a set of flags. Just pass \textpf{0} for this argument.
+            \end{itemize}
+        \pause \item The returned value from \textpf{waitpid} is the PID of the \textpf{wait}ed-upon child, or \textpf{-1} on error.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{int *wstatus}}
+    \begin{itemize}
+        \pause \item This is an ``out-argument." That is, it's a pointer argument that's used as an additional returned value.
+        \pause \item Upon success, \textpf{waitpid} writes details about the \textpf{wait}ed-upon process into \textpf{*wstatus}.
+        \pause \item You can access these details using function-like macros provided in \textpf{sys/wait.h}.
+        \pause \item e.g., check \textpf{if (WIFEXITED(wstatus))} to test whether the \textpf{wait}ed-upon process has exited.
+        \pause \item If it has exited, then you can obtain its exit status with \textpf{WEXITSTATUS(wstatus)}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Tell me what to type, again!}
+    Let's fix our code from earlier.
+    % The goal is for the students to end up with something like `ls_twice_fixed.c` (found in this directory).
+\end{frame}
+
+\begin{frame}[fragile]{The CWD (``current working directory")}
+    \begin{itemize}
+        \pause \item When you run \textpf{ls} in the shell, how does it know which directory to list?
+        \pause \item Each process has a CWD, which is, by default, the directory from which that process was executed.
+        \pause \item A process can change its CWD by issuing a \textpf{chdir} system call.
+        \pause \item When you run \textpf{cd} in your shell, you're asking the shell to make a \textpf{chdir} syscall.
+        \pause \item Demo! % Use `strace --trace=chdir bash` and then `cd` around
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{chdir}}
+    \begin{itemize}
+        \pause \item \textpf{chdir} is a system call that changes the CWD.
+        \pause \item It takes a path string as an argument,
+        \pause \item returns 0 on success,
+        \pause \item and negative on error.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Signals}
+    \begin{itemize}
+        \pause \item A signal is a little ``ping" that processes can send to each other.
+        \pause \item When a process receives a signal, it will automatically run a special function associated with that signal, called a signal handler.
+        \pause \item There are $\sim 32$ kinds of signals (listed in \textpf{man 7 signal}). e.g.,
+            \begin{itemize}
+                \pause \item \textpf{SIGSEGV}: The signal that the kernel sends to your process when you segfault.
+                    \begin{itemize}
+                        \pause \item Default handler: Terminate the process.
+                    \end{itemize}
+                \pause \item \textpf{SIGILL}: The signal that the kernel sends to your process when you attempt to execute an invalid instruction.
+                    \begin{itemize}
+                        \pause \item Default handler: Terminate the process.
+                    \end{itemize}
+                \pause \item \textpf{SIGINT}: The signal that your process receives when you press Ctrl-C in the terminal.
+                    \begin{itemize}
+                        \pause \item Default handler: Terminate the process.
+                    \end{itemize}
+            \end{itemize}
+        \pause \item The different kinds of signals are defined as constants in \textpf{signal.h}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Sending Signals}
+    \begin{itemize}
+        \pause \item To send a signal to a process, use \textpf{kill(2)} in C, or \textpf{kill(1)} in the shell.
+        \pause \item \textbf{IMPORTANT: \textpf{kill} sends a signal! It doesn't necessarily kill the process!}
+        \pause \item To the \textpf{man} page!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Signal Handlers}
+    \begin{itemize}
+        \pause \item For most types of signals, a process may register a \textit{signal handler}: a function that is invoked when the signal is delivered.
+        \pause \item A signal handler should accept one \textpf{int} argument, and return \textpf{void}.
+        \pause \item The argument will contain the numeric value of the received signal type (which is safe to ignore if your signal handler handles only one type of signal).
+        \pause \item You can register signal handlers with \textpf{signal(3)}.
+        \pause \item To the \textpf{man} page!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Signal Example}
+    Demo!
+    % simple_signal.c
+\end{frame}
+
+
+\begin{frame}[fragile]{The Dangers of Signals!}
+    Demo!
+    % malloc_loop.c
+\end{frame}
+
+\begin{frame}[fragile]{Activity!}
+    Write a C program that
+    \begin{enumerate}
+        \pause \item parses a hex number out of \textpf{argv[1]} using \textpf{strtoull(3)},
+        \pause \item then writes a single \textpf{'a'} byte into that address,
+        \pause \item and exits successfully only when that write causes a \textpf{SIGSEGV} to be delivered to your process.
+    \end{enumerate}
+\end{frame}
+
+\end{document}
