@@ -6,19 +6,20 @@ geometry: margin=1in
 
 In this assignment, you are tasked with implementing a shell.
 
-Your shell should do this following:
+Your shell should do the following:
 
-1. Print a little prompt (e.g., `$`, `>`, `[user@host]`).
-2. Read a line from `stdin`.
-3. If `stdin` is exhausted, make an `exit` syscall with status 0.
-4. If the line is a well-formatted `cd` command, appropriately invoke the `chdir` syscall, handle any errors, and go back to step 1.
-5. If the line is a well-formatted `exit` command, appropriately invoke the `exit` syscall.
-6. If the line is a poorly-formatted `cd` or `exit` command, print an error, and go back to step 1.
-7. If the line is empty, go back to step 1.
-8. Otherwise, make a new process, try to walk the `PATH` if necessary, and try to `execve`.
-9. Wait for the child process to terminate, then go back to step 1.
+1.  Print a little prompt (e.g., `$`, `>`, `[user@host]`).
+2.  Read a line from `stdin`.
+3.  If `stdin` is exhausted, make an `exit` syscall with status 0.
+4.  Split the line on runs of spaces, tabs, or newlines to create an `argv`.
+5.  If the line is empty, go back to step 1.
+6.  If the line is a well-formatted `cd` command, appropriately invoke the `chdir` syscall, handle any errors, and go back to step 1.
+7.  If the line is a well-formatted `exit` command, appropriately invoke the `exit` syscall.
+8.  If the line is a poorly-formatted `cd` or `exit` command, print an error, and go back to step 1.
+9.  Otherwise, make a new process, try to walk the `PATH` if necessary, and try to `execve`.
+10. Wait for the child process to terminate, then go back to step 1.
 
-You are permitted to use any and all functions from libc, except the ones that walk the `PATH` for you.
+You are permitted to use any and all functions from libc, except the ones that walk the `PATH` for you (e.g., `system`, `popen`, `execvp`, `execvpe`).
 We recommend against using the `strtok` and `strtok_r` functions; they're more trouble than they're worth.
 No other external library code is allowed.
 
@@ -88,7 +89,8 @@ afs  boot  etc	 lib	media  opt   root  sbin  sys  usr
 bin  dev   home  lib64	mnt    proc  run   srv	 tmp  var
 $ cat /etc/fedora-release
 Fedora release 44 (Forty Four)
-$ exit
+$ sleep 10
+^C$ exit
 [bkallus@plink ~]
 ```
 
@@ -97,7 +99,7 @@ $ exit
 A single file named `shell.c`, that implements your shell when compiled and run.
 You can just leave it in your home directory on Plink; we'll find it.
 
-# Use of External Resources
+## Use of External Resources
 
 Feel free to use whatever external sources you want, **so long as every
 keystroke in your submission is your own.** That is to say, asking
