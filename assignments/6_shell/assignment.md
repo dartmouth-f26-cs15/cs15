@@ -48,7 +48,7 @@ When the user presses Ctrl-C, the shell should not die, but the running process 
 
 e.g., when the user runs `sleep 10` in your shell, then presses Ctrl-C after 1 second, the user should be dropped back into the shell prompt.
 
-Hint \#1: `WIFEXITED` will not be true for a process that is killed by a signal. Instead, you'll want to check `WIFSIGNALED`
+Hint \#1: `WIFEXITED` will not be true for a process that is killed by a signal. Instead, you'll want to check `WIFSIGNALED`.
 Hint \#2: implementing this section should require no more than 3 lines of code.
 
 ## Handling Errors
