@@ -2,7 +2,7 @@
 geometry: margin=1in
 ---
 
-# Assignment 6: `shell`, Due Wednesday, November 11
+# Assignment 6: `shell`, Due Thursday, November 12
 
 In this assignment, you are tasked with implementing a shell.
 
