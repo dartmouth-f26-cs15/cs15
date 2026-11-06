@@ -79,7 +79,7 @@ hello students!
 $ cd /fakedirectory
 cd failed!
 $ fakeprogram with fake arguments
-can't find it :(
+program not found! :(
 $ /bin/ls /
 afs  boot  etc	 lib	media  opt   root  sbin  sys  usr
 bin  dev   home  lib64	mnt    proc  run   srv	 tmp  var
