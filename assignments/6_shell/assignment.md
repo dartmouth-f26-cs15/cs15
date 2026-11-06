@@ -95,6 +95,7 @@ $ exit
 ## What to Submit
 
 A single file named `shell.c`, that implements your shell when compiled and run.
+You can just leave it in your home directory on Plink; we'll find it.
 
 # Use of External Resources
 
