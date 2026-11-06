@@ -72,7 +72,7 @@ You may assume that
 
 ## Example Usage
 
-``` bash
+```
 [bkallus@plink ~] ./shell
 $ echo hello students!
 hello students!
