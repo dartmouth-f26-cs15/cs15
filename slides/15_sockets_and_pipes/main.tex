@@ -1,0 +1,92 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{emoji}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{Topics}
+    \begin{itemize}
+        \item Shared Memory
+        \item Sockets
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Shared Memory}
+    \begin{itemize}
+        \pause \item Shared memory is a Unix IPC mechanism that allows two processes to share a memory mapping.
+        \pause \item The easiest way to make a shared memory mapping is with \textpf{mmap}.
+        \pause \item When you \textpf{mmap} pages with \textpf{MAP\_SHARED} instead of \textpf{MAP\_PRIVATE}, those pages are shared into child processes.
+        \pause \item When child processes write into those mappings, the parent can see the writes, and vice-versa.
+        \pause \item Demo!
+        \pause \item Now with optimizations enabled?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{mmap}ping Files}
+    \begin{itemize}
+        \pause \item As we've alluded to in previous classes, \textpf{mmap} can be used to map the contents of a file into your address space.
+        \pause \item To do this, don't use the \textpf{MAP\_ANONYMOUS} flag, and change the \textpf{fd} argument to a valid file descriptor.
+        \pause \item You can use this to create shared mappings between processes that don't have a parent-child relationship!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{TCP (Background)}
+    \begin{itemize}
+        \pause \item TCP (transmission control protocol) is a protocol that allows two computers to establish a pipe over the internet.
+        \pause \item That is, one computer can write into the pipe, and the other computer can read the written bytes out of the other end of the pipe (and vice-versa).
+        \pause \item When you connect to a website in the browser, you're very likely doing so using TCP connections.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{ncat}}
+    \begin{itemize}
+        \pause \item Netcat (\textpf{nc(1)}) is a command-line utility for creating TCP connections.
+        \pause \item 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Sockets}
+    \begin{itemize}
+        \pause \item Sockets are file descriptors that correspond to network connections.
+        \pause \item Sockets are really versatile, and support a whole lot of protocols.
+        \pause \item Today, we'll be using sockets to establish TCP connections.
+        \pause \item (If you care to learn more about this, take CS60).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{socket(2)}}
+    \begin{itemize}
+        \pause \item You can create a socket using the \textpf{socket} system call.
+        \pause \item \textpf{socket} takes 3 arguments:
+            \begin{itemize}
+                \pause \item \textpf{domain}: The desired protocol family for the socket to use. e.g., \textpf{AF\_INET} for internet protocols, \textpf{AF\_BLUETOOTH} for bluetooth, etc.
+                \pause \item \textpf{type}: The desired communication semantics. Use \textpf{SOCK\_STREAM} for streaming protocols like TCP.
+                \pause \item \textpf{protocol}: The desired communication protocol. If left to 0, gets a default value determined by \textpf{type}. Use \textpf{IPPROTO\_TCP} (defined in \textpf{netinet/in.h}) for TCP.
+            \end{itemize}
+        \pause \item \textpf{socket} returns the file descriptor corresponding to your socket.
+    \end{itemize}
+\end{frame}
+
+\end{document}
