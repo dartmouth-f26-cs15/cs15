@@ -25,27 +25,20 @@ int main(int const argc, char const *const *const argv) {
     }
     struct sockaddr_in const ipaddr = {
         .sin_family = AF_INET,
-        .sin_port = htons(80),
+        .sin_port = htons(1234),
         .sin_addr = {
-            .s_addr = htonl(0x6814179a), // <-- Talk about where this came from!!
+            .s_addr = htonl(0x7f000001) /* 127.0.0.1 */,
         }
     };
     if (connect(sockfd, &ipaddr, sizeof(ipaddr)) < 0) {
         return EXIT_FAILURE;
     }
 
-    while (true) {
-        char buf[1024];
-        ssize_t const stdin_bytes_read = read(STDIN_FILENO, buf, sizeof(buf));
-        if (stdin_bytes_read < 0) {
-            return EXIT_FAILURE;
-        }
-        write_all(sockfd, buf, stdin_bytes_read);
-        ssize_t const sockfd_bytes_read = read(sockfd, buf, sizeof(buf));
-        if (sockfd_bytes_read < 0) {
-            return EXIT_FAILURE;
-        }
-        write_all(STDOUT_FILENO, buf, sockfd_bytes_read);
+    char buf[1024];
+    ssize_t const sockfd_bytes_read = read(sockfd, buf, sizeof(buf));
+    if (sockfd_bytes_read < 0) {
+        return EXIT_FAILURE;
     }
+    write_all(STDOUT_FILENO, buf, sockfd_bytes_read);
 }
 
