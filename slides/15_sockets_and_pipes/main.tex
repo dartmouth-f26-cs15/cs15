@@ -63,7 +63,8 @@
 \begin{frame}[fragile]{\textpf{ncat}}
     \begin{itemize}
         \pause \item Netcat (\textpf{nc(1)}) is a command-line utility for creating TCP connections.
-        \pause \item 
+        \pause \item Demo! % First use nc as a client to talk to a remote server,
+                           % Then as a server and establish a connection using another nc
     \end{itemize}
 \end{frame}
 
@@ -87,6 +88,32 @@
             \end{itemize}
         \pause \item \textpf{socket} returns the file descriptor corresponding to your socket.
     \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{connect(2)}}
+    \begin{itemize}
+        \pause \item You can connect a socket to a remote peer using the \textpf{connect} system call.
+        \pause \item \textpf{connect} takes 3 arguments:
+            \begin{itemize}
+                \pause \item \textpf{int sockfd}: The socket's file descriptor.
+                \pause \item \textpf{struct sockaddr const *addr}: A \textpf{struct} representing the address of the host that you want to connect to.
+                \pause \item \textpf{socklen\_t addrlen}: The size of \textpf{addr}.
+            \end{itemize}
+        \pause \item \textpf{connect} returns an error code on failure, and 0 on success.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Interacting with a socket}
+    Sockets can be read, written, and closed just like any other file descriptor.
+\end{frame}
+
+\begin{frame}[fragile]{Activity: Steal the secret!}
+    I have started a TCP server on Plink's port 1234 that writes out a secret string.
+    
+    Connect to this server using \textpf{nc} and print the string.
+
+    Then, write a C program to do the same thing.
 \end{frame}
 
 \end{document}
