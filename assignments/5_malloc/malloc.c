@@ -1,6 +1,6 @@
 #define _DEFAULT_SOURCE
 #include <malloc.h> // for malloc_usable_size, memalign, pvalloc, mallopt, mallinfo, mallinfo2, struct mallinfo, struct mallinfo2, malloc_trim, malloc_stats, malloc_info
-#include <pthread.h> // for PTHREAD_MUTEX_INITIALIZER, pthread_mutex_t, pthread_mutex_lock, pthread_mutex_unlock
+#include <threads.h> // mtx_t, mtx_init, thrd_success, mtx_plain, mtx_lock, mtx_unlock
 #include <stddef.h>  // for size_t
 #include <stdio.h>   // for FILE
 #include <stdlib.h> // for malloc, free, realloc, calloc, reallocarray, aligned_alloc, posix_memalign, valloc, EXIT_FAILURE, free_sized, free_aligned_sized
@@ -9,19 +9,36 @@
 
 #include "cs15_malloc.h"
 
-static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+static mtx_t mutex;
+[[gnu::constructor]] static void initialize_heap_mutex(void) {
+    if (mtx_init(&mutex, mtx_plain) != thrd_success) {
+        _exit(EXIT_FAILURE);
+    }
+}
+
+static void lock(void) {
+    if (mtx_lock(&mutex) != thrd_success) {
+        _exit(EXIT_FAILURE);
+    }
+}
+
+static void unlock(void) {
+    if (mtx_unlock(&mutex) != thrd_success) {
+        _exit(EXIT_FAILURE);
+    }
+}
 
 void *malloc(size_t const size) {
-    pthread_mutex_lock(&mutex);
+    lock();
     void *const result = cs15_malloc(size);
-    pthread_mutex_unlock(&mutex);
+    unlock();
     return result;
 }
 
 void free(void *const ptr) {
-    pthread_mutex_lock(&mutex);
+    lock();
     cs15_free(ptr);
-    pthread_mutex_unlock(&mutex);
+    unlock();
 }
 
 void *calloc(size_t const nmemb, size_t const size) {
@@ -46,9 +63,9 @@ void *reallocarray(void *const ptr, size_t const nmemb, size_t const size) {
 }
 
 void *realloc(void *const ptr, size_t const size) {
-    pthread_mutex_lock(&mutex);
+    lock();
     void *const result = cs15_realloc(ptr, size);
-    pthread_mutex_unlock(&mutex);
+    unlock();
     return result;
 }
 
