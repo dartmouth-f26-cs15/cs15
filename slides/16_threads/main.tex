@@ -82,6 +82,36 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Demo}
+    Demo :)
+\end{frame}
+
+\begin{frame}[fragile]{Mutexes}
+    \begin{itemize}
+        \pause \item Sometimes, there's a \textit{critical section} of your program that should be executed by only one thread at a time.
+        \pause \item You can synchronize threads to enforce this constraint using a \textit{mutex}.
+        \pause \item A mutex is an object with two states:
+            \begin{itemize}
+                \pause \item \textit{locked}, indicating that the mutex is owned by a thread.
+                \pause \item \textit{unlocked}, indicating that it's not.
+            \end{itemize}
+        \pause \item When two threads simultaneously attempt to lock a mutex, only one of them will get it.
+        \pause \item The other one will be blocked until the mutex is unlocked.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Mutex Functions}
+    \begin{itemize}
+        \pause \item \textpf{mtx\_init}: initializes a mutex. Must be called before a mutex can be used.
+        \pause \item \textpf{mtx\_lock}: locks the mutex.
+        \pause \item \textpf{mtx\_unlock}: unlocks the mutex.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Demo, continued!!}
+    Demo :)
+\end{frame}
+
 \begin{frame}[fragile]{\textpf{thrd\_join}}
     \begin{itemize}
         \pause \item The equivalent of \textpf{waitpid} for threads is called \textpf{thrd\_join}.
@@ -90,6 +120,15 @@
                 \pause \item the \textpf{thrd\_t} to be waited upon
                 \pause \item an out-argument \textpf{int *} to store returned value from the thread's start function.
             \end{enumerate}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Activity!}
+    \begin{itemize}
+        \item Write a program that uses \textpf{getrandom(2)} to read a gigabyte of random data into a static array, and return its sum (mod 256).
+        \item Use threads to divide and conquer the work.
+        \item Measure the performance benefit of the threaded program using \textpf{time(1)}.
     \end{itemize}
 \end{frame}
 
