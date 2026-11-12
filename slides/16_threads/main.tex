@@ -1,0 +1,96 @@
+\documentclass[hyphens,aspectratio=169,dvipsnames]{beamer}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{moresize}
+\usepackage{framed}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage{emoji}
+\usepackage{tikz}
+\usepackage{comment}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetheme{Berlin}
+\usecolortheme[RGB={0,95,47}]{structure}
+\beamertemplatenavigationsymbolsempty
+
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
+
+\newcommand{\textpf}[1]{\texttt{\color{black}\fcolorbox{lightgray}{lightgray}{#1}}}
+
+\begin{document}
+
+\begin{frame}[fragile]{Topics}
+    \begin{itemize}
+        \item Threads
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{fork}ing is a heavyweight operation}
+    \begin{itemize}
+        \pause \item \textpf{fork} duplicates (almost) the entire state of the process!
+        \pause \item Then, because processes don't share an address space, you need to use IPC to communicate between them.
+        \pause \item Sometimes, this is overkill. What if I just want to do multiple things at once \textit{within a process}?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Threads}
+    \begin{itemize}
+        \pause \item Threads are execution units \textit{within a process}.
+        \pause \item That is, a process with multiple threads can do multiple things at the same time.
+        \pause \item Threads exist \textit{within a process}, so they share an address space.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Creating a Thread}
+    \begin{itemize}
+        \pause \item When a process starts, it has only one thread (the \textit{main thread}).
+        \pause \item To create a new thread, use the \textpf{thrd\_create} function from \textpf{threads.h}.
+        \pause \item (Run \textpf{info libc 'ISO C Threads'} to read the documentation for the functions in \textpf{threads.h}.)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{New Terminology: ``Handle"}
+    \begin{itemize}
+        \pause \item A handle is an object that represents a reference to a resource.
+        \pause \item Handles can be passed to code that operate on the underlying resource.
+        \pause \item For example,
+        \begin{itemize}
+            \pause \item A file descriptor is a handle for a socket, I/O stream, or file. % It's more complicated than this, but it's okay :)
+            \pause \item A PID is a handle for a process.
+        \end{itemize}
+        \pause \item The handle for a thread is called a \textpf{thrd\_t}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{thrd\_create}}
+    \begin{itemize}
+        \pause \item \textpf{thrd\_create} takes three arguments:
+        \begin{enumerate}
+            \pause \item \textpf{thrd\_t *thr}, an out-argument into which your thread handle is written.
+            \pause \item \textpf{thrd\_start\_t func}, the function that your thread will execute. (Should take a \textpf{void *} and return an \textpf{int}).
+            \pause \item \textpf{void *arg}, the argument to \textpf{func}.
+        \end{enumerate}
+        \pause \item Q: Why is \textpf{arg} a \textpf{void *}?
+        \pause \item On success, \textpf{thrd\_create} returns \textpf{thrd\_success}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textpf{thrd\_join}}
+    \begin{itemize}
+        \pause \item The equivalent of \textpf{waitpid} for threads is called \textpf{thrd\_join}.
+        \pause \item \textpf{thrd\_join} takes two arguments:
+            \begin{enumerate}
+                \pause \item the \textpf{thrd\_t} to be waited upon
+                \pause \item an out-argument \textpf{int *} to store returned value from the thread's start function.
+            \end{enumerate}
+    \end{itemize}
+\end{frame}
+
+\end{document}
