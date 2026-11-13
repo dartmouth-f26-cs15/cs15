@@ -62,8 +62,9 @@
         \pause \item This is an ``out-argument." That is, it's a pointer argument that's used as an additional returned value.
         \pause \item Upon success, \textpf{waitpid} writes details about the \textpf{wait}ed-upon process into \textpf{*wstatus}.
         \pause \item You can access these details using function-like macros provided in \textpf{sys/wait.h}.
-        \pause \item e.g., check \textpf{if (WIFEXITED(wstatus))} to test whether the \textpf{wait}ed-upon process has exited.
-        \pause \item If it has exited, then you can obtain its exit status with \textpf{WEXITSTATUS(wstatus)}.
+        \pause \item e.g., check \textpf{if (WIFEXITED(wstatus))} to test whether the \textpf{wait}ed-upon process has exited due to an \textpf{exit} syscall.
+        \pause \item If it has, then you can obtain its exit status with \textpf{WEXITSTATUS(wstatus)}.
+        \pause \item Check \textpf{if (WIFSIGNALED(wstatus))} to test whether the \textpf{wait}ed-upon process has died due to receiving a signal whose default handler terminates the process.
     \end{itemize}
 \end{frame}
 
