@@ -36,8 +36,8 @@ The area of memory managed by an allocator.
 A structure containing the following:
 
 1. `size`: the size of the allocation's data.
-3. `next`: a pointer allowing this chunk to be inserted into a doubly linked list.
 3. `prev`: a pointer allowing this chunk to be inserted into a doubly linked list.
+3. `next`: a pointer allowing this chunk to be inserted into a doubly linked list.
 3. `data`: an array of `size` many bytes of data.
 
 When the user makes an allocation, the allocator will return a pointer to the beginning of the `data` field of a chunk with the appropriate size.
@@ -148,8 +148,8 @@ No allocator functions have been called yet, so the allocator hasn't mapped any 
                .
                .
 0xdafeda1e038: [irrelevant]
-0xdafeda1e030: NULL (top chunk's prev)
-0xdafeda1e028: NULL (top chunk's next)
+0xdafeda1e030: NULL (top chunk's next)
+0xdafeda1e028: NULL (top chunk's prev)
 0xdafeda1e020: 0xfc8 (top chunk's size)
 0xdafeda1e018: [irrelevant] <-- p
 0xdafeda1e010: NULL (next)
@@ -204,8 +204,8 @@ Then, because the top chunk is the only chunk in the heap, we `munmap` it, leavi
                .
                .
 0xdafeda1e098: [irrelevant]
-0xdafeda1e090: NULL (top chunk's prev)
-0xdafeda1e088: NULL (top chunk's next)
+0xdafeda1e090: NULL (top chunk's next)
+0xdafeda1e088: NULL (top chunk's prev)
 0xdafeda1e080: 0xf68 (top chunk's size)
 0xdafeda1e078: [irrelevant] <-- p3
 0xdafeda1e070: NULL (next)
@@ -240,8 +240,8 @@ Each of them is carved off of the top chunk in sequence, just as we saw in the p
                .
                .
 0xdafeda1e098: [irrelevant]
-0xdafeda1e090: NULL (top chunk's prev)
-0xdafeda1e088: NULL (top chunk's next)
+0xdafeda1e090: NULL (top chunk's next)
+0xdafeda1e088: NULL (top chunk's prev)
 0xdafeda1e080: 0xf68 (top chunk's size)
 0xdafeda1e078: [irrelevant] <-- p3
 0xdafeda1e070: NULL (next)
@@ -277,8 +277,8 @@ The freelist is now `[0xdafeda1e000]`.
                .
                .
 0xdafeda1e098: [irrelevant]
-0xdafeda1e090: NULL (top chunk's prev)
-0xdafeda1e088: NULL (top chunk's next)
+0xdafeda1e090: NULL (top chunk's next)
+0xdafeda1e088: NULL (top chunk's prev)
 0xdafeda1e080: 0xf68 (top chunk's size)
 0xdafeda1e078: [irrelevant] <-- p3
 0xdafeda1e070: NULL (next)
@@ -314,8 +314,8 @@ The freelist is now `[0xdafeda1e040, 0xdafeda1e000]`.
                .
                .
 0xdafeda1e098: [irrelevant]
-0xdafeda1e090: NULL (top chunk's prev)
-0xdafeda1e088: NULL (top chunk's next)
+0xdafeda1e090: NULL (top chunk's next)
+0xdafeda1e088: NULL (top chunk's prev)
 0xdafeda1e080: 0xf68 (top chunk's size)
 0xdafeda1e078: [irrelevant] <-- p3
 0xdafeda1e070: NULL (next)
@@ -352,8 +352,8 @@ The freelist is now `[0xdafeda1e000]`.
                .
                .
 0xdafeda1e098: [irrelevant]
-0xdafeda1e090: NULL (top chunk's prev)
-0xdafeda1e088: NULL (top chunk's next)
+0xdafeda1e090: NULL (top chunk's next)
+0xdafeda1e088: NULL (top chunk's prev)
 0xdafeda1e080: 0xf68 (top chunk's size)
 0xdafeda1e078: [irrelevant] <-- p3
 0xdafeda1e070: NULL (next)
@@ -389,8 +389,8 @@ The freelist is now `[0xdafeda1e040, 0xdafeda1e000]`.
                .
                .
 0xdafeda1e098: [irrelevant]
-0xdafeda1e090: NULL (top chunk's prev)
-0xdafeda1e088: NULL (top chunk's next)
+0xdafeda1e090: NULL (top chunk's next)
+0xdafeda1e088: NULL (top chunk's prev)
 0xdafeda1e080: 0xf68 (top chunk's size)
 0xdafeda1e078: [irrelevant] <-- p3
 0xdafeda1e070: NULL (next)
