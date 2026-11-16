@@ -23,7 +23,7 @@ You are permitted to use any and all functions from libc, except the ones that w
 We recommend against using the `strtok` and `strtok_r` functions; they're more trouble than they're worth.
 No other external library code is allowed.
 
-**You must be able to explain your code. If you don't understand a library function, don't call it.**
+**If you don't know how to implement a library function, don't call it.**
 
 ## Walking the `PATH`
 
